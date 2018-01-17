@@ -174,7 +174,7 @@ NOTE: I'll take a moment for ActiveJob to send the email. Be patient.
 ----
 $ rails console
 Running via Spring preloader in process 1795
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> User.create(name: "Wintermeyer", email: "sw@wintermeyer-consulting.de")
    (0.1ms)  begin transaction
   SQL (0.5ms)  INSERT INTO "users" ("name", "email", "created_at",

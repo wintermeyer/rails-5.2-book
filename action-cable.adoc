@@ -56,9 +56,9 @@ The content of the view:
 
 We are going to append HTML to `<div id="messages"></div>` in the DOM.
 To do that we need https://jquery.com[jQuery] which is not installed by
-default in Rails 5.1 any more. There are two ways of doing this.
+default in Rails 5.2 any more. There are two ways of doing this.
 The old way was to add `gem 'jquery-rails'` followed by a `bundle`. This
-still works but Rails 5.1 has yarn build in and that is the new way of
+still works but Rails 5.2 has yarn build in and that is the new way of
 tackle the . If you haven't installed yarn yet have a look at
 https://yarnpkg.com/en/docs/install
 
@@ -70,7 +70,7 @@ it via `brew install yarn`:
 brew install yarn
 ----
 
-Within Rails 5.1 you can use yarn now to install jQuery:
+Within Rails 5.2 you can use yarn now to install jQuery:
 
 [source,bash]
 ----
@@ -209,7 +209,7 @@ Rails project is locate. Fire up the console and use
 ----
 $ rails console
 Running via Spring preloader in process 19706
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> ActionCable.server.broadcast 'web_notifications_channel',
 message: '<p>Hello World!</p>'
 [ActionCable] Broadcasting to web_notifications_channel:

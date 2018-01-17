@@ -10,7 +10,7 @@ This chapter's installation methods described are intended for
 development systems.
 
 [[ruby-on-rails-5.1-on-debian-8.7-jessie]]
-== Ruby on Rails 5.1 on Debian 8.7 (Jessie)
+== Ruby on Rails 5.2 on Debian 8.7 (Jessie)
 
 ((("Debian", "8.7 (Jessie)")))
 There are two main reasons for installing a Ruby on Rails system with
@@ -69,7 +69,7 @@ xyz@debian:~$
 ----
 
 [[installing-ruby-2.4-and-ruby-on-rails-5.1-with-rvm]]
-=== Installing Ruby 2.4 and Ruby on Rails 5.1 with RVM
+=== Installing Ruby 2.4 and Ruby on Rails 5.2 with RVM
 
 ((("RVM")))
 Log in with your normal user account (in our case, it's the user `xyz`).
@@ -101,14 +101,14 @@ xyz@debian:~$ gem install rails
 xyz@debian:~$
 ----
 
-TIP: You need to run `gem install rails --pre` in case Rails 5.1 is still
+TIP: You need to run `gem install rails --pre` in case Rails 5.2 is still
      beta while you read this text.
 
 `gem install rails` installs the current stable Rails version. You can use the
 format `gem install rails -v 5.1.0` to install a specific version and `gem
 install rails --pre` to install a current beta version.
 
-RVM, Ruby 2.4 and Rails 5.1 are now installed. You can check it
+RVM, Ruby 2.4 and Rails 5.2 are now installed. You can check it
 with the following commands.
 
 [source,bash]
@@ -116,25 +116,25 @@ with the following commands.
 xyz@debian:~$ ruby -v
 ruby 2.4.1p111 (2017-03-22 revision 58053) [x86_64-linux]
 xyz@debian:~$ rails -v
-Rails 5.1.0
+Rails 5.2.0
 xyz@debian:~$
 ----
 
 [[ruby-on-rails-5.1-on-windows]]
-== Ruby on Rails 5.1 on Windows
+== Ruby on Rails 5.2 on Windows
 
 ((("Windows")))
 At http://railsinstaller.org/ you'll find a simple, all-inclusive Ruby on
 Rails installer for Windows for Ruby and Rails.
 
 [[ruby-on-rails-5.1-on-mac-os-10.12-sierra]]
-== Ruby on Rails 5.1 on macOS 10.12 (Sierra)
+== Ruby on Rails 5.2 on macOS 10.12 (Sierra)
 
 ((("macOS", "10.12 (Sierra)")))
 macOS 10.12 includes Ruby by default. Not interesting for our purposes.
-We want Ruby 2.4 and Rails 5.1. To avoid interfering with the existing
+We want Ruby 2.4 and Rails 5.2. To avoid interfering with the existing
 Ruby and Rails installation and therefore the packet management of Mac
-OS X, we install Ruby 2.4 and Rails 5.1 with RVM (Ruby Version Manager).
+OS X, we install Ruby 2.4 and Rails 5.2 with RVM (Ruby Version Manager).
 
 With RVM, you can install and run any number of Ruby and Rails versions
 as normal user (without root rights and in your home directory).
@@ -153,7 +153,7 @@ https://developer.apple.com/xcode/
 IMPORTANT: Please take care to install all the command line tools!
 
 [[installing-ruby-2.4-and-ruby-on-rails-5.1-with-rvm-1]]
-=== Installing Ruby 2.4 and Ruby on Rails 5.1 with RVM
+=== Installing Ruby 2.4 and Ruby on Rails 5.2 with RVM
 
 RVM can be installed in various ways. I recommend using the following
 monster command (please copy it exactly) that installs the latest RVM,
@@ -181,14 +181,14 @@ $ gem install rails
 $
 ----
 
-TIP: You need to run `gem install rails --pre` in case Rails 5.1 is still
+TIP: You need to run `gem install rails --pre` in case Rails 5.2 is still
      beta while you read this text.
 
 `gem install rails` installs the current stable Rails version. You can use the
 format `gem install rails -v 5.1.0` to install a specific version and `gem
 install rails --pre` to install a current beta version.
 
-RVM, Ruby 2.4 and Rails 5.1 are now fully installed. You can check it
+RVM, Ruby 2.4 and Rails 5.2 are now fully installed. You can check it
 with the following commands.
 
 [source,bash]
@@ -196,6 +196,6 @@ with the following commands.
 $ ruby -v
 ruby 2.4.0p0 (2016-12-24 revision 57164) [x86_64-darwin16]
 $ rails -v
-Rails 5.1.0
+Rails 5.2.0
 $
 ----

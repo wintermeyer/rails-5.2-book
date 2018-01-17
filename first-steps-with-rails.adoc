@@ -38,7 +38,7 @@ In terms of the database, the main focus in this chapter is once more
 not on optimum performance, but on showing you a simple and quick way of getting
 started. That's why Rails uses the SQLite-3 database. You already have
 everything you need installed and you don't need to worry about
-anything. Later I will explain how you can use other databases (e.g. MySQL).
+anything. Later I will explain how you can use other databases (e.g. PostgreSQL).
 
 [[why-is-it-all-in-english]]
 == Why Is It All in English?
@@ -68,16 +68,18 @@ Let's first create a new Rails project.
 [[create-rails-project]]
 === Create Rails Project
 
-Before we even get going, please check that you are using Rails 5.1:
+Before we even get going, please check that you are using Rails 5.2:
 
 [source,bash]
 ----
 $ rails -v
-Rails 5.1.0
+Rails 5.2.0
 ----
 
 That's looking good. If you have an older version of Ruby or Rails
-installed, please install the 5.1 version before you read any further.
+installed, please install the 5.2 version before you read any further. The
+command `gem install rails` installs the current Rails version and
+`gem install rails --pre` the beta of the next version.
 
 Now we start by creating a new Rails project with the name
 `testproject`. Ruby on Rails is a framework, so we first need to set up
@@ -91,11 +93,21 @@ $ rails new testproject
       create
       create  README.md
       create  Rakefile
+      create  .ruby-version
       create  config.ru
       [...]
 ----
 
-Next, we check if the new Rails application is working by launching the
+Next, we `cd` into the new directory and run the first migration to
+create Active Storage tables:
+
+[source,bash]
+----
+$ cd testproject
+$ rails db:migrate
+----
+
+We check if the new Rails application is working by launching the
 integrated web server.
 
 TIP: Depending on the operating system (for example, Mac OS X) and on
@@ -107,22 +119,17 @@ TIP: Depending on the operating system (for example, Mac OS X) and on
 ----
 $ rails server
 => Booting Puma
-=> Rails 5.1.0 application starting in development on http://localhost:3000
+=> Rails 5.2.0 application starting in development
 => Run `rails server -h` for more startup options
 Puma starting in single mode...
-* Version 3.8.2 (ruby 2.4.0-p0), codename: Sassy Salamander
+* Version 3.11.0 (ruby 2.5.0-p0), codename: Love Song
 * Min threads: 5, max threads: 5
 * Environment: development
 * Listening on tcp://0.0.0.0:3000
 Use Ctrl-C to stop
 ----
 
-The start of the Rails application is looking good. It tells us:
-
-[source,bash]
-----
-=> Rails 5.1.0 application starting in development on http://localhost:3000
-----
+The start of the Rails application is looking good.
 
 So let's go to the URL http://localhost:3000 in your web browser.
 
@@ -177,10 +184,10 @@ Now start the Rails web server with `rails server`
 ----
 $ rails server
 => Booting Puma
-=> Rails 5.1.0 application starting in development on http://localhost:3000
+=> Rails 5.2.0 application starting in development on http://localhost:3000
 => Run `rails server -h` for more startup options
 Puma starting in single mode...
-* Version 3.8.2 (ruby 2.4.0-p0), codename: Sassy Salamander
+* Version 3.11.0 (ruby 2.5.0-p0), codename: Love Song
 * Min threads: 5, max threads: 5
 * Environment: development
 * Listening on tcp://0.0.0.0:3000
@@ -193,7 +200,8 @@ http://localhost:3000/hello-world
 image::screenshots/chapter03/hello-world-html.png[Hello Word]
 
 No output in the log means: This page was not handled by the Rails
-framework. It was delivered directly from the webserver.
+framework. It was delivered directly from the webserver which is Puma
+in this case.
 
 NOTE: We can of course also use the URL
       http://localhost:3000/hello-world.html. But Rails regards
@@ -254,7 +262,7 @@ suggest that we simply try `rails generate controller Example test`
 [source,bash]
 ----
 $ rails generate controller Example test
-Running via Spring preloader in process 11197
+Running via Spring preloader in process 35388
       create  app/controllers/example_controller.rb
        route  get 'example/test'
       invoke  erb
@@ -301,11 +309,12 @@ In the log file `log/development.log` we find the following lines:
 
 [source,bash]
 ----
-Started GET "/example/test" for 127.0.0.1 at 2017-03-22 13:58:41 +0100
+Started GET "/example/test" for 127.0.0.1 at 2018-01-17 16:59:41 +0100
+   (0.1ms)  SELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC
 Processing by ExampleController#test as HTML
   Rendering example/test.html.erb within layouts/application
-  Rendered example/test.html.erb within layouts/application (0.7ms)
-Completed 200 OK in 930ms (Views: 811.4ms)
+  Rendered example/test.html.erb within layouts/application (0.8ms)
+Completed 200 OK in 833ms (Views: 823.0ms | ActiveRecord: 0.0ms)
 ----
 
 An HTTP GET request for the URI
@@ -810,6 +819,7 @@ I'll show you how to work with it in this example application:
 $ rails new pingpong
   [...]
 $ cd pingpong
+$ rails db:migrate
 $ rails generate controller Game ping pong
   [...]
 $
@@ -821,7 +831,7 @@ Start the Rails console with the command `rails console`:
 ----
 $ rails console
 Running via Spring preloader in process 18395
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 irb(main):001:0>
 ----
 
@@ -851,7 +861,7 @@ later in the proper application:
 ----
 $ rails console
 Running via Spring preloader in process 19371
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> Rails.env
 => "development"
 >> Rails.root
@@ -879,16 +889,16 @@ TIP: One of my best buddies when developing Rails applications
 ----
 $ rails console
 Running via Spring preloader in process 19799
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> app.url_for(controller: 'game', action: 'ping')
 => "http://www.example.com/game/ping"
 >> app.get '/game/ping'
-Started GET "/game/ping" for 127.0.0.1 at 2017-03-22 17:29:54 +0100
+Started GET "/game/ping" for 127.0.0.1 at 2018-01-17 17:14:50 +0100
+   (0.2ms)  SELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC
 Processing by GameController#ping as HTML
   Rendering game/ping.html.erb within layouts/application
-  Rendered game/ping.html.erb within layouts/application (1.7ms)
-/Users/stefan/.rvm/gems/ruby-2.5.0/gems/sass-3.4.23/lib/sass/util.rb:1109: warning: constant ::Fixnum is deprecated
-Completed 200 OK in 616ms (Views: 590.1ms)
+  Rendered game/ping.html.erb within layouts/application (54.4ms)
+Completed 200 OK in 898ms (Views: 884.8ms | ActiveRecord: 0.0ms)
 
 => 200
 >> exit
@@ -910,15 +920,19 @@ Usage: rails generate GENERATOR [args] [options]
 [...]
 
 Rails:
+  application_record
   assets
   channel
   controller
+  encrypted_file
+  encryption_key_file
   generator
   helper
   integration_test
   jbuilder
   job
   mailer
+  master_key
   migration
   model
   resource
@@ -926,6 +940,9 @@ Rails:
   scaffold_controller
   system_test
   task
+
+ActiveRecord:
+  active_record:application_record
 
 Coffee:
   coffee:assets
@@ -988,7 +1005,7 @@ You can also try out the helper in the console:
 ----
 $ rails console
 Running via Spring preloader in process 23849
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> helper.render_stars(5)
 => "*****"
 >> helper.render_stars(3)
@@ -1040,6 +1057,7 @@ Let me show you this by example with this simple rails application:
 $ rails new testapp
   [...]
 $ cd testapp
+$ rails db:migrate
 $ rails generate controller page index
 ----
 

@@ -161,7 +161,7 @@ model. In the Rails console, we can output the attributes of the class
 ----
 $ rails console
 Running via Spring preloader in process 22303
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> Country.column_names
 => ["id", "name", "population", "created_at", "updated_at"]
 >> exit
@@ -288,7 +288,7 @@ also work with the `class` and `method` name.
 ----
 $ rails console
 Running via Spring preloader in process 23132
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> Country.name.tableize
 => "countries"
 >> Country.name.foreign_key
@@ -372,7 +372,7 @@ Let's try creating a country in the console with the command
 ----
 $ rails console
 Running via Spring preloader in process 23285
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> Country.create(name: 'Germany', population: 81831000)
    (0.1ms)  begin transaction
   SQL (0.4ms)  INSERT INTO "countries" ("name", "population", "created_at",
@@ -434,7 +434,7 @@ disadvantages):
 ----
 $ rails console
 Running via Spring preloader in process 23679
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> france = Country.new
 => #<Country id: nil, name: nil, population: nil, created_at: nil,
 updated_at: nil>
@@ -488,7 +488,7 @@ Example:
 ----
 $ rails console
 Running via Spring preloader in process 23823
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> netherlands = Country.new(name: 'Netherlands')
 => #<Country id: nil, name: "Netherlands", population: nil,
 created_at: nil, updated_at: nil>
@@ -523,7 +523,7 @@ each case. Let's start with the easiest ones: `first` and `last`.
 ----
 $ rails console
 Running via Spring preloader in process 24090
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> Country.first
   Country Load (0.2ms)  SELECT  "countries".* FROM "countries" ORDER BY
   "countries"."id" ASC LIMIT ?  [["LIMIT", 1]]
@@ -833,7 +833,7 @@ at once via the ID:
 ----
 $ rails console
 Running via Spring preloader in process 26956
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> Album.find(2)
   Album Load (0.2ms)  SELECT  "albums".* FROM "albums"
   WHERE "albums"."id" = ? LIMIT ?  [["id", 2], ["LIMIT", 1]]
@@ -881,7 +881,7 @@ database. Let's search for all `albums` from the year 1966:
 ----
 $ rails console
 Running via Spring preloader in process 27119
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> Album.where(release_year: 1966)
   Album Load (0.2ms)  SELECT "albums".* FROM "albums"
   WHERE "albums"."release_year" = ?  [["release_year", 1966]]
@@ -958,7 +958,7 @@ The method `not` provides a way to search for the exact oposite of a
 ----
 $ rails console
 Running via Spring preloader in process 27349
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> Album.where.not(release_year: 1968).count
    (0.2ms)  SELECT COUNT(*) FROM "albums"
    WHERE ("albums"."release_year" != ?)  [["release_year", 1968]]
@@ -977,7 +977,7 @@ logical `or`. Example:
 ----
 $ rails console
 Running via Spring preloader in process 27449
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> Album.where(release_year: 1967).or(Album.where(name: 'The Beatles')).count
    (0.2ms)  SELECT COUNT(*) FROM "albums"
    WHERE ("albums"."release_year" = ? OR "albums"."name" = ?)
@@ -1013,7 +1013,7 @@ contains the string “on”:
 ----
 $ rails console
 Running via Spring preloader in process 27553
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> Album.where( 'name like ?', '%on%').count
    (0.1ms)  SELECT COUNT(*) FROM "albums" WHERE (name like '%on%')
 => 5
@@ -1064,7 +1064,7 @@ Let's count all albums whose name contain the string “on”:
 ----
 $ rails console
 Running via Spring preloader in process 27699
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> Album.where( "name like '%on%'" ).count
    (0.2ms)  SELECT COUNT(*) FROM "albums" WHERE (name like '%on%')
 => 5
@@ -1096,7 +1096,7 @@ ActiveRecord methods `to_sql` you can display the current SQL query.
 ----
 $ rails console
 Running via Spring preloader in process 27764
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> a = Album.where(release_year: 1965..1968)
   Album Load (0.2ms)  SELECT "albums".* FROM "albums" WHERE
   ("albums"."release_year" BETWEEN 1965 AND 1968)
@@ -1134,7 +1134,7 @@ sum.
 ----
 $ rails console
 Running via Spring preloader in process 27764
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> Album.where(release_year: 1970..1979).sum(:release_year)
    (1.5ms)  SELECT SUM("albums"."release_year") FROM "albums" WHERE
    ("albums"."release_year" BETWEEN 1970 AND 1979)
@@ -1166,7 +1166,7 @@ Example: all albums from the 60s, sorted by name:
 ----
 $ rails console
 Running via Spring preloader in process 27764
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> **Album.where(release_year: 1960..1969).order(:name)**
   Album Load (0.2ms)  SELECT "albums".* FROM "albums" WHERE
   ("albums"."release_year" BETWEEN 1960 AND 1969)  ORDER BY "albums"."name"
@@ -1243,7 +1243,7 @@ Let's return all `albums`, grouped by their `release_year`:
 ----
 $ rails console
 Running via Spring preloader in process 27764
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> Album.group(:release_year)
   Album Load (0.3ms)  SELECT "albums".* FROM "albums" GROUP BY "albums"."release_year"
 => #<ActiveRecord::Relation [#<Album id: 5, name: "Rubber Soul", release_year:
@@ -1275,7 +1275,7 @@ for the query. You can do this via the method `pluck`.
 ----
 $ rails console
 Running via Spring preloader in process 27927
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> Album.where(release_year: 1960..1969).pluck(:name)
    (0.2ms)  SELECT "albums"."name" FROM "albums"
    WHERE ("albums"."release_year" BETWEEN ? AND ?)
@@ -1511,7 +1511,7 @@ to “A Test”:
 ----
 $ rails console
 Running via Spring preloader in process 27927
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> beatles_album = Album.where(name: 'The Beatles').first
   Album Load (0.2ms)  SELECT  "albums".* FROM "albums"
   WHERE "albums"."name" = ?  ORDER BY "albums"."id" ASC LIMIT 1
@@ -1642,7 +1642,7 @@ Raising an `ActiveRecord::StaleObjectError`:
 ----
 $ rails console
 Running via Spring preloader in process 27927
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> Product.create(name: 'Orange', price: 0.5)
    (0.1ms)  begin transaction SQL (0.7ms)  INSERT INTO "products" ("name",
    "price", "created_at", "updated_at", "lock_version")
@@ -1773,7 +1773,7 @@ Let's have a look at this on the console:
 ----
 $ rails console
 Running via Spring preloader in process 36245
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> Category.column_names
 => ["id", "name", "created_at", "updated_at"]
 >> Product.column_names
@@ -1824,7 +1824,7 @@ First create a new category for the fruits:
 ----
 $ rails console
 Running via Spring preloader in process 37142
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> fruits = Category.create(name: "Fruits")
    (0.1ms)  begin transaction
   SQL (0.5ms)  INSERT INTO "categories"
@@ -1936,7 +1936,7 @@ only happens after a `save`:
 ----
 $ rails console
 Running via Spring preloader in process 40092
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> fruits = Category.where(name: "Fruits").first
   Category Load (0.1ms)  SELECT  "categories".* FROM "categories"
   WHERE "categories"."name" = ? ORDER BY "categories"."id" ASC LIMIT ?
@@ -2013,7 +2013,7 @@ We already know how to access the products of a given category:
 ----
 $ rails console
 Running via Spring preloader in process 45107
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> Category.first.products.count
   Category Load (0.1ms)  SELECT  "categories".* FROM "categories"
   ORDER BY "categories"."id" ASC LIMIT ?  [["LIMIT", 1]]
@@ -2055,7 +2055,7 @@ And off we go. First we check how many products are in the database:
 ----
 $ rails console
 Running via Spring preloader in process 45328
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> Product.count
    (0.1ms)  SELECT COUNT(*) FROM "products"
 => 11
@@ -2166,7 +2166,7 @@ associated with a `Category` in one go:
 ----
 $ rails console
 Running via Spring preloader in process 46835
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> Category.first.products.destroy_all
   Category Load (0.3ms)  SELECT  "categories".* FROM "categories"
   ORDER BY "categories"."id" ASC LIMIT ?  [["LIMIT", 1]]
@@ -2253,7 +2253,7 @@ table. All products of this category are also automatically destroyed:
 ----
 $ rails console
 Running via Spring preloader in process 47105
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> Product.count
    (0.1ms)  SELECT COUNT(*) FROM "products"
 => 6
@@ -2404,7 +2404,7 @@ We create a new `Order` object:
 ----
 $ rails console
 Running via Spring preloader in process 48290
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> order = Order.new(delivery_address: '123 Acme Street')
 => #<Order id: nil, delivery_address: "123 Acme Street",
 created_at: nil, updated_at: nil>
@@ -2585,7 +2585,7 @@ Let's go into the _console_ and create a car and a bike:
 ----
 $ rails console
 Running via Spring preloader in process 27927
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> beetle = Car.create(name: 'Beetle')
    (0.1ms)  begin transaction
   SQL (0.8ms)  INSERT INTO "cars" ("name", "created_at", "updated_at") VALUES
@@ -2751,7 +2751,7 @@ Let's create a record and then destroy it again:
 ----
 $ rails console
 Running via Spring preloader in process 27927
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> book = Book.create(title: 'Homo faber')
    (0.1ms)  begin transaction
   SQL (0.7ms)  INSERT INTO "books" ("title", "created_at", "updated_at")
@@ -2885,7 +2885,7 @@ $ rails db:reset
   [...]
 $ rails console
 Running via Spring preloader in process 27927
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> Book.create(title: 'Homo faber').authors.create(first_name: 'Max',
    last_name: 'Frisch')
    (0.5ms)  begin transaction
@@ -3021,7 +3021,7 @@ we can use the following query each time:
 ----
 $ rails console
 Running via Spring preloader in process 27927
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> Product.where(in_stock: true).count
    (0.1ms)  SELECT COUNT(*) FROM "products" WHERE "products"."in_stock" = 't'
 => 5
@@ -3045,7 +3045,7 @@ And then use it:
 ----
 $ rails console
 Running via Spring preloader in process 27927
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> Product.available.count
    (0.1ms)  SELECT COUNT(*) FROM "products" WHERE "products"."in_stock" = 't'
 => 5
@@ -3071,7 +3071,7 @@ in stock:
 ----
 $ rails console
 Running via Spring preloader in process 27927
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> Product.cheap.count
    (0.3ms)  SELECT COUNT(*) FROM "products" WHERE ("products"."price" BETWEEN
    0 AND 1)
@@ -3105,7 +3105,7 @@ Now we can count all products that cost less than 50 cent:
 ----
 $ rails console
 Running via Spring preloader in process 27927
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> Product.cheaper_than(0.5).count
    (0.2ms)  SELECT COUNT(*) FROM "products" WHERE (price < 0.5)
 => 2
@@ -3133,7 +3133,7 @@ field `in_stock`:
 ----
 $ rails console
 Running via Spring preloader in process 27927
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> product = Product.available.build
 => #<Product id: nil, name: nil, price: nil, weight: nil, in_stock: true,
 expiration_date: nil, created_at: nil, updated_at: nil>
@@ -3186,7 +3186,7 @@ a problem:
 ----
 $ rails console
 Running via Spring preloader in process 27927
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> product = Product.create
 [...]
 => #<Product id: 1, name: nil, price: nil, weight: nil,
@@ -3222,7 +3222,7 @@ Now we try again to create an empty record in the console:
 ----
 $ rails console
 Running via Spring preloader in process 27927
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> product = Product.create
    (0.1ms)  begin transaction
    (0.1ms)  rollback transaction
@@ -3343,7 +3343,7 @@ validation errors:
 ----
 $ rails console
 Running via Spring preloader in process 27927
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> product = Product.create
    (0.1ms)  begin transaction
    (0.1ms)  rollback transaction
@@ -3399,7 +3399,7 @@ we get an error message:
 ----
 $ rails console
 Running via Spring preloader in process 27927
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> product = Product.create(:name => 'M', :price => 0.45)
    (0.1ms)  begin transaction
    (0.1ms)  rollback transaction
@@ -3539,7 +3539,7 @@ instead of numbers, we will get an error message:
 ----
 $ rails console
 Running via Spring preloader in process 27927
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> product = Product.create(name: 'Milk (1 liter)',
    price: 0.45, weight: 'abc')
    (0.1ms)  begin transaction
@@ -3676,7 +3676,7 @@ exists, then we get an error message:
 ----
 $ rails console
 Running via Spring preloader in process 27927
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> Product.last
   Product Load (0.2ms)  SELECT  "products".* FROM "products"
   ORDER BY "products"."id" DESC LIMIT 1
@@ -3764,7 +3764,7 @@ In our data model, a `Product` must be either `true` or `false` for
 ----
 $ rails console
 Running via Spring preloader in process 27927
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> product = Product.create(name: 'Milk low-fat (1 liter)')
    (0.1ms)  begin transaction
    (0.1ms)  rollback transaction
@@ -4019,7 +4019,7 @@ Let's test the validation in the console:
 ----
 $ rails console
 Running via Spring preloader in process 27927
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> reservation = Reservation.new(start_date: Date.today, end_date: Date.today)
 => #<Reservation id: nil, start_date: "2015-12-17", end_date: "2015-12-17",
 room_type: nil, created_at: nil, updated_at: nil>
@@ -4182,7 +4182,7 @@ field `updated_at`:
 ----
 $ rails console
 Running via Spring preloader in process 27927
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> Product.column_names
 => ["id", "name", "price", "weight", "in_stock", "expiration_date",
 "created_at", "updated_at", "height"]
@@ -4541,7 +4541,7 @@ Let's see in the console if it really works as we want it to:
 ----
 $ rails console
 Running via Spring preloader in process 27927
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> User.create(login: 'smith', email: 'SMITH@example.com')
    (0.1ms)  begin transaction
   SQL (0.5ms)  INSERT INTO "users" ("login", "email", "created_at",
@@ -4607,7 +4607,7 @@ contains the quantity 1:
 ----
 $ rails console
 Running via Spring preloader in process 27927
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> order = Order.new
 => #<Order id: nil, product_id: nil, quantity: 1, created_at: nil,
 updated_at: nil>

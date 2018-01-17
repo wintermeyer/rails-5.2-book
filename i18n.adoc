@@ -59,7 +59,7 @@ the language setting:
 ----
 $ rails console
 Running via Spring preloader in process 3337
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> price = 1000.23
 => 1000.23
 >> helper.number_to_currency(price, locale: :de)
@@ -94,7 +94,7 @@ In the Rails console we can try out how `I18n.t` works:
 ----
 $ rails console
 Running via Spring preloader in process 3487
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> I18n.t :hello
 => "Hello world"
 >> I18n.locale
@@ -148,7 +148,7 @@ to German.
 ----
 $ rails console
 Running via Spring preloader in process 4009
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> I18n.locale = :de
 => :de
 >> I18n.t :hello
@@ -210,7 +210,7 @@ or with a `:scope` for the symbols. You can also mix both options.
 ----
 $ rails console
 Running via Spring preloader in process 4243
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> I18n.t 'example.test'
 => "A test"
 >> I18n.t 'aaa.bbb.test'

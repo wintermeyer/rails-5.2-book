@@ -51,7 +51,7 @@ which creates it:
 ----
 $ rails console
 Running via Spring preloader in process 98485
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> ExampleJob.perform_later
 Enqueued ExampleJob (Job ID: bb6e9781-8ffb-4bf2-8dfc-8ac983ed8bf6)
 to Async(default)

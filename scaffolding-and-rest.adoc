@@ -688,10 +688,10 @@ Now we start the Rails web server:
 ----
 $ rails server
 => Booting Puma
-=> Rails 5.1.0 application starting in development on http://localhost:3000
+=> Rails 5.2.0 application starting in development on http://localhost:3000
 => Run `rails server -h` for more startup options
 Puma starting in single mode...
-* Version 3.8.2 (ruby 2.4.0-p0), codename: Sassy Salamander
+* Version 3.11.0 (ruby 2.5.0-p0), codename: Love Song
 * Min threads: 5, max threads: 5
 * Environment: development
 * Listening on tcp://0.0.0.0:3000
@@ -1191,10 +1191,10 @@ The same message will be displayed in the log:
 ----
 $ rails server
 => Booting Puma
-=> Rails 5.1.0 application starting in development on http://localhost:3000
+=> Rails 5.2.0 application starting in development on http://localhost:3000
 => Run `rails server -h` for more startup options
 Puma starting in single mode...
-* Version 3.8.2 (ruby 2.4.0-p0), codename: Sassy Salamander
+* Version 3.11.0 (ruby 2.5.0-p0), codename: Love Song
 * Min threads: 5, max threads: 5
 * Environment: development
 * Listening on tcp://0.0.0.0:3000

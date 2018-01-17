@@ -872,7 +872,7 @@ finally we output the new `cache_key`
 ----
 $ rails console
 Running via Spring preloader in process 40524
-Loading development environment (Rails 5.1.0)
+Loading development environment (Rails 5.2.0)
 >> Company.first.cache_key
   Company Load (0.2ms)  SELECT  "companies".* FROM "companies"  ORDER BY
   "companies"."id" ASC LIMIT 1

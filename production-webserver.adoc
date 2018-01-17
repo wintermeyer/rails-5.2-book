@@ -4,7 +4,7 @@
 This chapter walks you through the setup process of a production server which
 runs Nginx as a reverse proxy webserver and Puma as the Ruby on Rails webserver
 behind the Nginx. We start with a fresh Debian system and install all the
-software we need. The Rails 5.1 project will be run with Ruby 2.4 which gets
+software we need. The Rails 5.2 project will be run with Ruby 2.4 which gets
 installed with RVM and runs for the user deployer.
 
 The example Rails application we use is called `blog`. It will contain a `post`
@@ -135,7 +135,7 @@ root@debian:~# su - deployer
 ----
 
 As user `deployer`, please carry out the steps for installing Ruby 2.4
-and Rails 5.1 via RVM.
+and Rails 5.2 via RVM.
 
 [source,bash]
 ----
@@ -152,7 +152,7 @@ deployer@debian:~$ gem install rails
 deployer@debian:~$
 ----
 
-TIP: You need to run `gem install rails --pre` in case Rails 5.1 is still
+TIP: You need to run `gem install rails --pre` in case Rails 5.2 is still
      beta while you read this text.
 
 [[setting-up-a-new-rails-project]]
