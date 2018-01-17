@@ -1,0 +1,201 @@
+[appendix]
+
+[[installing]]
+= Ruby on Rails Install How-to
+
+[[development-system]]
+== Development System
+
+This chapter's installation methods described are intended for
+development systems.
+
+[[ruby-on-rails-5.1-on-debian-8.7-jessie]]
+== Ruby on Rails 5.1 on Debian 8.7 (Jessie)
+
+((("Debian", "8.7 (Jessie)")))
+There are two main reasons for installing a Ruby on Rails system with
+RVM (Ruby Version Manager):
+
+* You simply do not have any root rights on the system. In that case,
+you have no other option.
+* You want to run several Rails systems that are separated cleanly, and
+perhaps also separate Ruby versions. This can be easily done with RVM.
+
+NOTE: Detailed information on RVM can be found on the
+      RVM homepage at https://rvm.io
+
+This description assumes that you have a freshly installed Debian
+GNU/Linux 8.7 ("Jessie"). You will find an ISO image for the
+installation at http://www.debian.org. I recommend the approximately 250
+MB net installation CD image. For instructions on how to install
+Debian-GNU/Linux, please go to http://www.debian.org/distrib/netinst.
+
+[[preparations]]
+=== Preparations
+
+If you have root rights on the target system, you can use the following
+commands to ensure that all required programs for a successful
+installation of RVM are available. If you do not have root rights, you
+have to either hope that your admin has already installed everything you
+need, or send them a quick e-mail with the corresponding lines.
+
+Login as root, update the package lists and upgrade the system:
+
+[source,bash]
+----
+root@debian:~# apt-get update
+[..]
+root@debian:~# apt-get upgrade
+----
+
+Installation of the packages required for the RVM installation:
+
+[source,bash]
+----
+root@debian:~# apt-get -y install curl gawk g++ \
+make libreadline6-dev zlib1g-dev libssl-dev \
+libyaml-dev libsqlite3-dev sqlite3 autoconf \
+libgdbm-dev libncurses5-dev libtool bison nodejs \
+pkg-config libffi-dev libgmp-dev libgmp-dev git
+----
+
+Now is a good time to log out as root:
+
+[source,bash]
+----
+root@debian:~# exit
+logout
+xyz@debian:~$
+----
+
+[[installing-ruby-2.4-and-ruby-on-rails-5.1-with-rvm]]
+=== Installing Ruby 2.4 and Ruby on Rails 5.1 with RVM
+
+((("RVM")))
+Log in with your normal user account (in our case, it's the user `xyz`).
+
+RVM, Ruby, and Ruby on Rails can be installed in various ways. I
+recommend using the following commands and get at least one cup of
+tea/coffee/favorite drink:
+
+[source,bash]
+----
+xyz@debian:~$ gpg --keyserver hkp://keys.gnupg.net \
+--recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+[...]
+xyz@debian:~$ curl -sSL https://get.rvm.io | bash
+[...]
+----
+
+For the next command you'll have to change the user to the user
+you are using. Actually have a look at the output of RVM.
+It will print the exact command you need to run:
+
+[source,bash]
+----
+xyz@debian:~$ source /home/xyz/.rvm/scripts/rvm
+xyz@debian:~$ rvm install 2.4 --autolibs=read-only
+[...]
+xyz@debian:~$ gem install rails
+[...]
+xyz@debian:~$
+----
+
+TIP: You need to run `gem install rails --pre` in case Rails 5.1 is still
+     beta while you read this text.
+
+`gem install rails` installs the current stable Rails version. You can use the
+format `gem install rails -v 5.1.0` to install a specific version and `gem
+install rails --pre` to install a current beta version.
+
+RVM, Ruby 2.4 and Rails 5.1 are now installed. You can check it
+with the following commands.
+
+[source,bash]
+----
+xyz@debian:~$ ruby -v
+ruby 2.4.1p111 (2017-03-22 revision 58053) [x86_64-linux]
+xyz@debian:~$ rails -v
+Rails 5.1.0
+xyz@debian:~$
+----
+
+[[ruby-on-rails-5.1-on-windows]]
+== Ruby on Rails 5.1 on Windows
+
+((("Windows")))
+At http://railsinstaller.org/ you'll find a simple, all-inclusive Ruby on
+Rails installer for Windows for Ruby and Rails.
+
+[[ruby-on-rails-5.1-on-mac-os-10.12-sierra]]
+== Ruby on Rails 5.1 on macOS 10.12 (Sierra)
+
+((("macOS", "10.12 (Sierra)")))
+macOS 10.12 includes Ruby by default. Not interesting for our purposes.
+We want Ruby 2.4 and Rails 5.1. To avoid interfering with the existing
+Ruby and Rails installation and therefore the packet management of Mac
+OS X, we install Ruby 2.4 and Rails 5.1 with RVM (Ruby Version Manager).
+
+With RVM, you can install and run any number of Ruby and Rails versions
+as normal user (without root rights and in your home directory).
+
+NOTE: Detailed information on RVM can be found at the RVM
+      homepage at https://rvm.io/
+
+[[xcode-installation-or-upgrade]]
+=== Xcode Installation or Upgrade
+
+Before you start installing Ruby on Rails, you must install the _latest_
+Apple Xcode tools on your system. The easiest way is via the Mac App
+Store (search for "xcode") or via the website
+https://developer.apple.com/xcode/
+
+IMPORTANT: Please take care to install all the command line tools!
+
+[[installing-ruby-2.4-and-ruby-on-rails-5.1-with-rvm-1]]
+=== Installing Ruby 2.4 and Ruby on Rails 5.1 with RVM
+
+RVM can be installed in various ways. I recommend using the following
+monster command (please copy it exactly) that installs the latest RVM,
+Ruby and Ruby on Rails in your home directory:
+
+[source,bash]
+----
+$ gpg --keyserver hkp://keys.gnupg.net \
+--recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+[...]
+$ curl -sSL https://get.rvm.io | bash
+[...]
+$
+----
+
+Now exit the current shell/terminal and open a new one for the next
+commands.
+
+[source,bash]
+----
+$ rvm install 2.4
+[...]
+$ gem install rails
+[...]
+$
+----
+
+TIP: You need to run `gem install rails --pre` in case Rails 5.1 is still
+     beta while you read this text.
+
+`gem install rails` installs the current stable Rails version. You can use the
+format `gem install rails -v 5.1.0` to install a specific version and `gem
+install rails --pre` to install a current beta version.
+
+RVM, Ruby 2.4 and Rails 5.1 are now fully installed. You can check it
+with the following commands.
+
+[source,bash]
+----
+$ ruby -v
+ruby 2.4.0p0 (2016-12-24 revision 57164) [x86_64-darwin16]
+$ rails -v
+Rails 5.1.0
+$
+----

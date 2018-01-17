@@ -1,0 +1,144 @@
+[[active-job]]
+= Active Job
+
+Sometimes a specific piece of code takes a long time to run but doesn't need to
+run right away. An example is sending an e-mail after creating an order at the
+end of a online shopping workflow. It can take a couple of seconds to send an
+e-mail but you don't want your user to wait for that to happen within the
+controller. It makes more sense to use a queueing mechanism for these tasks.
+
+Active Job provides such a queueing system. You can create jobs which are being
+processed asynchronous by active job.
+
+== Create a New Job
+
+The quickest way to create a new job is the job generator. Lets create an
+example job which waits for 10 seconds and than logs an info message:
+
+[source,bash]
+----
+$ rails new shop
+  [...]
+$ cd shop
+$ rails generate job example
+Running via Spring preloader in process 98344
+      invoke  test_unit
+      create    test/jobs/example_job_test.rb
+      create  app/jobs/example_job.rb
+$
+----
+
+All jobs are created in the `app/jobs` directory. Please change the
+`app/jobs/example_job.rb` file accordingly:
+
+[source,ruby]
+.app/jobs/example_job.rb
+----
+class ExampleJob < ApplicationJob
+  queue_as :default
+
+  def perform(*args)
+    sleep 10
+    logger.info "Just waited 10 seconds."
+  end
+end
+----
+
+You can test the job in your console with `ExampleJob.perform_later`
+which creates it:
+
+[source,bash]
+----
+$ rails console
+Running via Spring preloader in process 98485
+Loading development environment (Rails 5.1.0)
+>> ExampleJob.perform_later
+Enqueued ExampleJob (Job ID: bb6e9781-8ffb-4bf2-8dfc-8ac983ed8bf6)
+to Async(default)
+=> #<ExampleJob:0x007f816d466680 @arguments=[],
+@job_id="bb6e9781-8ffb-4bf2-8dfc-8ac983ed8bf6", @queue_name="default",
+@priority=nil, @executions=0,
+@provider_job_id="263a31ae-b33d-4a12-a603-22dfbba9cab7">
+>> Performing ExampleJob (Job ID: bb6e9781-8ffb-4bf2-8dfc-8ac983ed8bf6)
+from Async(default)
+Just waited 10 seconds.
+Performed ExampleJob (Job ID: bb6e9781-8ffb-4bf2-8dfc-8ac983ed8bf6)
+from Async(default) in 10012.97ms
+
+?> exit
+----
+
+The file `log/development.log` now contains the logging output.
+
+A more concrete example of using jobs you'll find in the
+xref:action-mailer#action-mailer[Action Mailer chapter] where an e-mail gets
+send.
+
+== Set the time for future execution
+
+The `set` method provides two arguments which can be used to set
+the execution of a job in the future:
+
+* wait
++
+[source,ruby]
+----
+ExampleJob.set(wait: 1.hour).perform_later
+----
++
+* wait_until
++
+[source,ruby]
+----
+ExampleJob.set(wait_until: Date.tomorrow.noon).perform_later
+----
++
+
+== Configure the Job Server Backend
+
+The page http://api.rubyonrails.org/classes/ActiveJob/QueueAdapters.html
+lists all available backends. To use one of them you have to install
+the needed gem. Here is an example for the use of the popular
+https://github.com/mperham/sidekiq[Sidekiq]. To use the gem you have to
+add it to `Gemfile` and run a `bundle install` afterwards:
+
+[source,ruby]
+.Gemfile
+----
+[...]
+gem 'sidekiq'
+----
+
+[source,bash]
+----
+$ bundle install
+----
+
+In `config/application.rb` you can configure
+the use of it:
+
+[source,ruby]
+.config/application.rb
+----
+require_relative 'boot'
+
+require 'rails/all'
+
+# Require the gems listed in Gemfile, including any gems
+# you've limited to :test, :development, or :production.
+Bundler.require(*Rails.groups)
+
+module Shop
+  class Application < Rails::Application
+    # Initialize configuration defaults for originally generated Rails version.
+    config.load_defaults 5.1
+
+    # Settings in config/environments/* take precedence over those specified here.
+    # Application configuration should go into files in config/initializers
+    # -- all .rb files in that directory are automatically loaded.
+
+    # Sidekiq Configuration
+    config.active_job.queue_adapter = :sidekiq
+  end
+end
+----

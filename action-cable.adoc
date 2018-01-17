@@ -1,0 +1,232 @@
+[[action-cable]]
+= Action Cable
+
+Most modern webpages are not just static. They often get updates from
+the server without interaction from the user. Your Twitter or GMail
+browser client will display new Tweets or E-Mails without you reloading
+the page. The server pushes the information. Action Cable provides the
+tools you need to use these mechanisms without diving deep into the
+technical aspects of websockets.
+
+The use of Action Cable always includes JavaScript and this book is
+about Ruby and Ruby on Rails. So I will only show you a minimal
+Hello World example of how Action Cable works.
+
+== Hello World ActionCable Example
+
+In our first example we are going to push content from the Rails console
+into a browser which shows the `page#index` view.
+
+=== The Rails Application
+
+Please create the following Rails application:
+
+[source,bash]
+----
+$ rails new hello-world-action-cable
+  [...]
+$ cd hello-world-action-cable
+$ rails generate controller page index
+  [...]
+----
+
+A root route so that we can access the page at
+http://localhost:3000
+
+[source,ruby]
+.config/routes.rb
+----
+Rails.application.routes.draw do
+  get 'page/index'
+  root 'page#index'
+end
+----
+
+The content of the view:
+
+[source,erb]
+.app/views/page/index.html.erb
+----
+<h1>Action Cable Example</h1>
+
+<div id="messages"></div>
+----
+
+=== Setting up jQuery
+
+We are going to append HTML to `<div id="messages"></div>` in the DOM.
+To do that we need https://jquery.com[jQuery] which is not installed by
+default in Rails 5.1 any more. There are two ways of doing this.
+The old way was to add `gem 'jquery-rails'` followed by a `bundle`. This
+still works but Rails 5.1 has yarn build in and that is the new way of
+tackle the . If you haven't installed yarn yet have a look at
+https://yarnpkg.com/en/docs/install
+
+If you are using macOS and https://brew.sh[Homebrew] you can install
+it via `brew install yarn`:
+
+[source,bash]
+----
+brew install yarn
+----
+
+Within Rails 5.1 you can use yarn now to install jQuery:
+
+[source,bash]
+----
+$ bin/yarn add jquery
+yarn add v0.21.3
+info No lockfile found.
+[1/4] 🔍  Resolving packages...
+[2/4] 🚚  Fetching packages...
+[3/4] 🔗  Linking dependencies...
+[4/4] 📃  Building fresh packages...
+success Saved lockfile.
+success Saved 1 new dependency.
+└─ jquery@3.2.1
+✨  Done in 1.57s.
+----
+
+To load 'jQuery' we have to add it in the
+`app/assets/javascripts/application.js` file:
+
+[source,javascript]
+.app/assets/javascripts/application.js
+----
+//= require jquery
+//= require rails-ujs
+//= require turbolinks
+//= require_tree .
+----
+
+=== Creating a Channel
+
+Rails provides a handy generator to create a new channel.
+We call our channel "WebNotifications".
+
+[source,bash]
+----
+$ rails generate channel WebNotifications
+Running via Spring preloader in process 17653
+      create  app/channels/web_notifications_channel.rb
+   identical  app/assets/javascripts/cable.js
+      create  app/assets/javascripts/channels/web_notifications.coffee
+----
+
+When ever somebody requests the `page#index` view we want him/her to
+automatically subscribe to our the `WebNotificationsChannel` channel.
+We do this by adding this piece of CoffeeScript:
+
+[source,javascript]
+.app/assets/javascripts/page.coffee
+----
+App.room = App.cable.subscriptions.create "WebNotificationsChannel",
+  received: (data) ->
+    $('#messages').append data['message']
+----
+
+Lastly we have to add this code to the channel.
+
+[source,ruby]
+.app/channels/web_notifications_channel.rb
+----
+class WebNotificationsChannel < ApplicationCable::Channel
+  def subscribed
+    stream_from "web_notifications_channel"
+  end
+
+  def unsubscribed
+  end
+end
+----
+
+We are going to start a `rails server` and a `rails console`
+in separate terminals. We need to use the Redis gem to make
+this work. This is not the default in the development setup.
+
+We have to activate the Redis gem by including this line in
+the 'Gemfile'
+
+[source,ruby]
+.Gemfile
+----
+gem 'redis', '~> 3.0'
+----
+
+After that change you have to run 'bundle' once more:
+
+[source,bash]
+----
+$ bundle
+----
+
+TIP: If you are running macOS and `brew` you can install
+     Redis with `brew install redis` and start it with
+     `brew services start redis`.
+
+And we have to configure the use of Redis:
+
+[source,yaml]
+.config/cable.yml
+----
+redis: &redis
+  adapter: redis
+  url: redis://localhost:6379/1
+
+production: *redis
+development: *redis
+test: *redis
+----
+
+Finally it's time to start up our development rails server:
+
+[source,bash]
+----
+$ rails server
+----
+
+And load http://localhost:3000 in your webbrowser. In the
+log you'll see this entry:
+
+[source,log]
+----
+Finished "/cable/" [WebSocket] for 127.0.0.1 at 2017-03-30 08:33:41 +0200
+WebNotificationsChannel stopped streaming from web_notifications_channel
+Started GET "/cable" for 127.0.0.1 at 2017-03-30 08:33:41 +0200
+Started GET "/cable/" [WebSocket] for 127.0.0.1 at 2017-03-30 08:33:41 +0200
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET,
+HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+WebNotificationsChannel is transmitting the subscription confirmation
+WebNotificationsChannel is streaming from web_notifications_channel
+----
+
+Now start a new terminal and go to the directory where your
+Rails project is locate. Fire up the console and use
+`ActionCable.server.broadcast` to broadcast a message to
+`web_notifications_channel`:
+
+[source,bash]
+----
+$ rails console
+Running via Spring preloader in process 19706
+Loading development environment (Rails 5.1.0)
+>> ActionCable.server.broadcast 'web_notifications_channel',
+message: '<p>Hello World!</p>'
+[ActionCable] Broadcasting to web_notifications_channel:
+{:message=>"<p>Hello World!</p>"}
+=> 1
+----
+
+Now you can see the update in your browser window.
+
+image::screenshots/chapter-action-cable/hello-world.png[hello world example]
+
+You can add other messages by calling
+`ActionCable.server.broadcast 'web_notifications_channel',
+message: '<p>Hello World!</p>'` again.
+
+Congratulation! You have your first working Action Cable application.
+
+TIP: By using `$('#messages').replaceWith data['message']` in
+     `app/assets/javascripts/page.coffee` you can replace the HTML content
+     instead of appending it. See http://api.jquery.com/replaceWith/

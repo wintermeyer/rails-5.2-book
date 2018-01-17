@@ -1,0 +1,36 @@
+[[preface1]]
+= Preface
+
+I write for developers who learn best by following clean examples. I don’t like
+the idea of coding one big single application throughout a book but prefer
+smaller stand-alone code examples. Therefore, you can skip a couple of pages or
+even complete chapters without losing context.
+
+This is my fifth Ruby on Rails book. It's divided into two parts. The first
+part (the one you are reading now) covers all the basics. It gives you the
+important groundwork to create a Rails application. The second one dives into
+advanced topics (e.g. TDD, I18n, Caching, ActionCable, Secrets, etc.).
+
+Don’t let people fool you into believing that Ruby on Rails is easy to learn. It
+is not! It's one of the best and most effective frameworks to develop web
+applications but it is hard to understand in the beginning. The worst mistake of
+all is to not learn Ruby before diving into Ruby on Rails. To avoid it this book
+starts with the xref:ruby-basics#ruby-basics[basics of Ruby]. You
+will not become a Ruby guru after reading it but you’ll understand the basic
+ideas and that is important.
+
+== Newsletter and Updates
+
+* I publish a free Ruby on Rails email newsletter which offers news and general
+  information about Rails. You can subscribe at
+  `https://www.amooma.de/newsletters/`
+* Twitter: `https://twitter.com/wintermeyer`
+
+== Consulting and Training
+
+Yes, I do provide Rails consulting and training. Please contact me by
+email at sw@wintermeyer-consulting.de with your request.
+
+Have fun with Ruby on Rails!
+
+_Stefan Wintermeyer_

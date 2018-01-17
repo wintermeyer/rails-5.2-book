@@ -1,0 +1,276 @@
+[[asset-pipeline]]
+= Asset Pipeline
+
+The asset pipeline offers the Rails developer the opportunity of delivering CSS,
+JavaScript and image files to the browser more optimally - in other words, in a
+more compressed form and therefore more quickly. Different CSS files are
+combined into one big file and delivered to the browser with a fingerprint in
+the file name. This fingerprinting enables the browser and any proxy in between
+to optimally cache the data, so the browser can load these files more quickly.
+
+NOTE: In case you are running on HTTP/2 is might be a good idea to
+      break up this flow into smaller chunks to optimize HTTP-Caching.
+
+Within the asset pipeline, you can program CSS, SASS, JavaScript and
+CoffeeScript extensively and clearly, in order to let them be delivered later as
+automatically compressed CSS and JavaScript files.
+
+As an example we use once more our web shop with a product scaffold:
+
+[source,bash]
+----
+$ rails new webshop
+  [...]
+$ cd webshop
+$ rails generate scaffold product name 'price:decimal{7,2}'
+  [...]
+$ rails db:migrate
+  [...]
+----
+
+In the directory `app/assets` you will then find the following files:
+
+[source,bash]
+----
+app/assets/
+├── config
+│   └── manifest.js
+├── images
+├── javascripts
+│   ├── application.js
+│   ├── cable.js
+│   ├── channels
+│   └── products.coffee
+└── stylesheets
+    ├── application.css
+    ├── products.scss
+    └── scaffolds.scss
+----
+
+The files `app/assets/javascripts/application.js` and
+`app/assets/stylesheets/application.css` are what is referred to as
+manifest files. They automatically include the other files in the
+relevant directory.
+
+[[application.js]]
+== application.js
+
+The file `app/assets/javascripts/application.js` has the following
+content:
+
+[source,javascript]
+.app/assets/javascripts/application.js
+----
+// [...]
+//
+//= require rails-ujs
+//= require turbolinks
+//= require_tree .
+----
+
+This file and all sub files (which are integrated via `required_tree`)
+are merged into on file and the asset
+pipeline optimizes it. The not yet optimized version can be downloaded
+in the development environment with this URL:
+http://localhost:3000/assets/application.js
+
+[[application.css]]
+== application.css
+
+The file `app/assets/stylesheets/application.css` has the following
+content:
+
+[source,css]
+.app/assets/stylesheets/application.css
+----
+/*
+ * [...]
+ *
+ *= require_tree .
+ *= require_self
+ */
+----
+
+With the command `require_tree .` all files in this directory are
+automatically integrated.
+
+The not yet optimized CSS can be downloaded with the URL:
+http://localhost:3000/assets/application.css
+
+[[rake-assetsprecompile]]
+== rails assets:precompile
+
+When using the asset pipeline, you need to remember that you have to
+precompile the assets before starting the Rails server in the production
+environment. This happens via the command `rails assets:precompile`
+
+[source,bash]
+----
+$ rails assets:precompile
+Yarn executable was not detected in the system.
+Download Yarn at https://yarnpkg.com/en/docs/install
+I, [2017-03-27T11:02:40.042715 #29512]  INFO -- :
+Writing /[...]/assets/manifest-e761...76d3b6b45692a920c8d04.js
+I, [2017-03-27T11:02:40.043501 #29512]  INFO -- :
+Writing /[...]/assets/manifest-e761...76d3b6b45692a920c8d04.js.gz
+[...]
+----
+
+If you forget to do this, you will find the following error message in
+the log:
+
+[source,log]
+----
+ActionView::Template::Error (application.css isn't precompiled)
+----
+
+The files created by `rails assets:precompile` appear in the directory
+`public/assets`
+
+[source,bash]
+----
+public/assets/
+├── application-68387...a0a1a902.js
+├── application-68387...a0a1a902.js.gz
+├── application-e51e...312ac.css
+├── application-e51e...312ac.css.gz
+├── cable-160...c1b10.js
+├── cable-160...c1b10.js.gz
+├── manifest-e761...8d04.js
+├── manifest-e761...8d04.js.gz
+├── products-571...4bf.css
+├── products-571...4bf.css.gz
+├── products-85...18fcb.js
+├── products-85...18fcb.js.gz
+├── scaffolds-c6fc...ee5e1.css
+└── scaffolds-c6fc...ee5e1.css.gz
+----
+
+Go ahead and use your favorite editor to have a look at the created
+`css` and `js` files. You will find minimized and optimized code.
+If the web server supports it, the zipped `gz` files are delivered
+directly, which speeds things up a bit more.
+
+The difference in file size is enormous. The file `application.js`
+created in the development environment has a file size of 80 KB. The
+file `js.gz` created by `rails assets:precompile` is only 20 KB.
+Users of cellphones in particular will be grateful for smaller
+file sizes.
+
+The speed advantage incidentally lies not just in the file size, but
+also in the fact that only one file is downloaded, not several.
+The HTTP/1.1 overhead for loading a file is time-consuming. Things
+are changing with HTTP/2.
+
+NOTE: jQuery used to be an essential part of the JavaScript
+      world in the Ruby on Rails world. Since Rails version 5.1
+      jQuery it no longer needed. Most people will still use it
+      but you don't have to.
+
+[[the-fingerprint]]
+== The Fingerprint
+
+The fingerprint in the file name consists of a hash sum generated from
+the content of the relevant file. This fingerprint ensures optimal
+caching and prevents an old cache being used if any changes are made to
+the content. A simple but very effective method.
+
+[[coding-links-to-an-asset]]
+== Coding Links to an Asset
+
+All files below the directory `app/assets` are delivered in normal
+form by the Rails server. For example, you can go to the URL
+http://localhost:3000/assets/rails.png to view the Rails logo saved
+under `app/assets/images/rails.png` and to
+http://localhost:3000/assets/application.js to view the content of
+`app/assets/javascripts/application.js`. The Rails image `rails.png` is
+delivered 1:1 and the file `application.js` is first created by the
+asset pipeline.
+
+But you should never enter these files as hard-wired in a view. To make
+the most of the asset pipeline, you must use the helpers described here.
+
+[[coding-link-to-an-image]]
+== Coding Link to an Image
+
+You want to save all images in the directory `app/assets/images/`.
+The asset pipeline will search for them there. To actually use them
+in your erb code you can use the `image_tag` helper. Assumed we have
+a file `app/assets/images/rails.png` we can recreate an `<img>` element
+with this code:
+
+[source,erb]
+----
+<%= image_tag "rails.png", alt: "Rails Logo" %>
+----
+
+In development mode, the following HTML code results from this:
+
+[source,erb]
+----
+<img alt="Rails Logo" src="/assets/rails.png" />
+----
+
+In production mode, you get an HTML code that points to a precompiled
+file with fingerprint:
+
+[source,erb]
+----
+<img alt="Rails Logo" src="/assets/rails-be...as0.png" />
+----
+
+[[coding-link-to-a-javascript-file]]
+== Coding Link to a JavaScript File
+
+You can use the helper `javascript_include_tag` to retrieve a JavaScript
+file compiled by the asset pipeline. This is what it would look like in
+the view for the file `app/assets/javascripts/application.js`:
+
+[source,erb]
+----
+<%= javascript_include_tag "application" %>
+----
+
+Normaly you don't have to care about this because the default
+`app/views/layouts/application.html.erb` takes care of it.
+
+[[coding-link-to-a-css-file]]
+== Coding Link to a CSS File
+
+A stylesheet compiled by the asset pipeline can be retrieved via the
+helper `stylesheet_link_tag`. In the view, it would look like this for
+the file `app/assets/stylesheets/application.css`:
+
+[source,erb]
+----
+<%= stylesheet_link_tag "application" %>
+----
+
+Normaly you don't have to care about this because the default
+`app/views/layouts/application.html.erb` takes care of it.
+
+[[defaults-in-the-application.html.erb]]
+== Defaults in the application.html.erb
+
+Incidentally, the file `app/views/layouts/application.html.erb` that the
+scaffold generator creates by default already contains the coding links
+for these JavaScript and stylesheet files:
+
+[source,erb]
+.app/views/layouts/application.html.erb
+----
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Webshop</title>
+    <%= csrf_meta_tags %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+    <%= yield %>
+  </body>
+</html>
+----

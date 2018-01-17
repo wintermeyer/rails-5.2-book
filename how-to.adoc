@@ -1,0 +1,16 @@
+[[how-to]]
+= How to work with this book
+
+This book requires basic knowledge of HTML, plus the reader - you, in
+other words - should also have a basic understanding of programming. I'm not
+going to teach you what a variable is. I'm just using them. I work
+a lot with example code and not so much with abstract definitions.
+
+NOTE: It's a technical book. Therefore there are parts which are mindblowing
+      boring. But I try to keep it to a minium.
+
+Each chapter and most sections work autarkic. You don't have to read the
+book in the order and you can skip chapters if they are not important to you.
+All code examples work without any dependecies to earlier chapters. I'm not
+going to build a gigantic application to show how cool Rails is. I prefer
+the approach of small projects to analyse and discuss specific topics.
