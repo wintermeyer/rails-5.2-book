@@ -887,7 +887,7 @@ Started GET "/game/ping" for 127.0.0.1 at 2017-03-22 17:29:54 +0100
 Processing by GameController#ping as HTML
   Rendering game/ping.html.erb within layouts/application
   Rendered game/ping.html.erb within layouts/application (1.7ms)
-/Users/stefan/.rvm/gems/ruby-2.4.0/gems/sass-3.4.23/lib/sass/util.rb:1109: warning: constant ::Fixnum is deprecated
+/Users/stefan/.rvm/gems/ruby-2.5.0/gems/sass-3.4.23/lib/sass/util.rb:1109: warning: constant ::Fixnum is deprecated
 Completed 200 OK in 616ms (Views: 590.1ms)
 
 => 200

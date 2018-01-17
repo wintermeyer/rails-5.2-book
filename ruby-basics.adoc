@@ -13,15 +13,20 @@ Matsumoto].
 It is easy to program in Ruby, but Ruby is not a simple language.
 
 [[ruby-version]]
-== Ruby 2.4
+== Ruby 2.5
 
-We are going to use Ruby 2.4. You can check the installed Ruby version
-by running the command `ruby -v`:
+We are going to use Ruby 2.5. But for most part of this book you can use
+older versions too. Ruby 2.5 is just a bit faster. You can check the installed
+Ruby version by running the command `ruby -v`:
 
 [source,bash]
 $ ruby -v
-ruby 2.4.0p0 (2016-12-24 revision 57164) [x86_64-darwin16]
+ruby 2.5.0p0 (2017-12-25 revision 61468) [x86_64-darwin17]
 $
+
+NOTE: If your system runs an older version and you want to upgrade it have a
+      look at https://rvm.io which is my prefered way of installing and using
+      different Ruby versions.
 
 [[chapter1-basics]]
 == Basics
@@ -330,7 +335,7 @@ the error message: `wrong number of arguments (0 for 1)`:
 ArgumentError: wrong number of arguments (given 0, expected 1)
 	from /Users/.../hello-worldx3c.rb:1:in `three_times'
 	from (irb):2
-	from /Users/stefan/.rvm/rubies/ruby-2.4.0/bin/irb:11:in `<main>'
+	from /Users/stefan/.rvm/rubies/ruby-2.5.0/bin/irb:11:in `<main>'
 >> exit
 ----
 
@@ -401,7 +406,7 @@ Now we try to call the method `three_times`:
 >> This_and_that.three_times
 NoMethodError: undefined method `three_times' for This_and_that:Class
 	from (irb):2
-	from /Users/stefan/.rvm/rubies/ruby-2.4.0/bin/irb:11:in `<main>'
+	from /Users/stefan/.rvm/rubies/ruby-2.5.0/bin/irb:11:in `<main>'
 >>
 ----
 
@@ -465,7 +470,7 @@ a
 >> abc.b
 NoMethodError: private method `b' called for #<Example:0x007fa530037910>
 	from (irb):4
-	from /Users/stefan/.rvm/rubies/ruby-2.4.0/bin/irb:11:in `<main>'
+	from /Users/stefan/.rvm/rubies/ruby-2.5.0/bin/irb:11:in `<main>'
 >> exit
 ----
 
@@ -656,7 +661,7 @@ $ irb
 >> example1.d
 NoMethodError: undefined method `d' for #<Abc:0x007fac5a845630>
 	from (irb):6
-	from /Users/stefan/.rvm/rubies/ruby-2.4.0/bin/irb:11:in `<main>'
+	from /Users/stefan/.rvm/rubies/ruby-2.5.0/bin/irb:11:in `<main>'
 >> example1.a
 => "a"
 >> exit
@@ -705,7 +710,7 @@ $ irb
 >> Knowledge.pi
 NoMethodError: undefined method `pi' for Knowledge:Class
 	from (irb):2
-	from /Users/stefan/.rvm/rubies/ruby-2.4.0/bin/irb:11:in `<main>'
+	from /Users/stefan/.rvm/rubies/ruby-2.5.0/bin/irb:11:in `<main>'
 >>
 ----
 
@@ -755,7 +760,7 @@ And the proof to the contrary:
 >> example.pi
 NoMethodError: undefined method `pi' for #<Knowledge:0x007fa8da045198>
 	from (irb):4
-	from /Users/stefan/.rvm/rubies/ruby-2.4.0/bin/irb:11:in `<main>'
+	from /Users/stefan/.rvm/rubies/ruby-2.5.0/bin/irb:11:in `<main>'
 >> exit
 ----
 
@@ -1018,7 +1023,7 @@ $ irb
 ==== Integers
 
 Ruby used to have different types of Integers depending on the length of the
-number. With version 2.4 things got easier: We just deal with `Integer`.
+number. Since Ruby version 2.4 things are easier: We just deal with `Integer`.
 
 [source,bash]
 ----
@@ -1051,7 +1056,8 @@ $ irb
 [[mixed-class-calculations]]
 ==== Mixed Class Calculations
 
-Adding two integers will result in an integer. Adding an integer and a float will result in a float:
+Adding two integers will result in an integer. Adding an integer and a float
+will result in a float:
 
 [source,bash]
 ----
@@ -1131,7 +1137,7 @@ $ irb
 ----
 
 You are on the safe side if you are using only ASCII symbols. But with
-Ruby 2.4 and the right encoding, you could also use special characters
+Ruby 2.5 and the right encoding, you could also use special characters
 (for example German Umlaute) more or less without any problems in a
 variable name. But if you want to be polite towards other programmers
 who probably do not have those characters directly available on their
