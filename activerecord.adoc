@@ -16,8 +16,8 @@ much less susceptible to errors than pure SQL. When working with this
 chapter, it helps if you have some knowledge of SQL, but this is not
 required and also not essential for working with `ActiveRecord`.
 
-This chapter is only about ActiveRecord. So I am not going to integrate
-any tests to keep the examples as simple as possible.
+NOTE: This chapter is only about ActiveRecord. So I am not going to integrate
+      any tests to keep the examples as simple as possible.
 
 [[creating-databasemodel]]
 == Creating Database/Model
@@ -177,8 +177,8 @@ record.
 [[getters-and-setters]]
 === Getters and Setters
 
-To read and write values of a SQL table row you can use by ActiveRecord
-provided xref:ruby-basics#getters-and-setters[getters and setters].
+To read and write values of a SQL table row you can use getters and setters by
+ActiveRecord provided xref:ruby-basics#getters-and-setters[getters and setters].
 These `attr_accessors` are automatically
 created. The getter of the field `updated_at` for a given `Country` with
 the name `germany` would be `germany.updated_at`.
@@ -333,8 +333,8 @@ production:
 ----
 
 As we are working in `development` mode, Rails has created a new SQLite3
-database `db/development.sqlite3` as a result of `rails db:migrate` and
-will save all data there.
+database in the file `db/development.sqlite3` as a result of `rails db:migrate`
+and will save all data there.
 
 Fans of command line clients can use `sqlite3` for viewing this
 database:
@@ -342,7 +342,7 @@ database:
 [source,bash]
 ----
 $ sqlite3 db/development.sqlite3
-SQLite version 3.14.0 2016-07-26 15:17:14
+SQLite version 3.19.3 2017-06-27 16:48:08
 Enter ".help" for usage hints.
 sqlite> .tables
 ar_internal_metadata  countries             schema_migrations
@@ -392,10 +392,10 @@ let's have a last look with the command line client `sqlite3`:
 [source,bash]
 ----
 $ sqlite3 db/development.sqlite3
-SQLite version 3.14.0 2016-07-26 15:17:14
+SQLite version 3.19.3 2017-06-27 16:48:08
 Enter ".help" for usage hints.
 sqlite> SELECT * FROM countries;
-1|Germany|81831000|2017-03-22 17:10:30.859482|2017-03-22 17:10:30.859482
+1|Germany|81831000|2017-03-23 17:10:03.141592|2017-03-22 17:10:03.141592
 sqlite> .exit
 ----
 
@@ -815,10 +815,18 @@ Dropped database 'db/development.sqlite3'
 Database 'db/test.sqlite3' does not exist
 Created database 'db/development.sqlite3'
 Created database 'db/test.sqlite3'
+-- create_table("active_storage_attachments", {:force=>:cascade})
+   -> 0.0074s
+-- create_table("active_storage_blobs", {:force=>:cascade})
+   -> 0.0033s
 -- create_table("albums", {:force=>:cascade})
-   -> 0.0189s
+   -> 0.0020s
+-- create_table("active_storage_attachments", {:force=>:cascade})
+   -> 0.0077s
+-- create_table("active_storage_blobs", {:force=>:cascade})
+   -> 0.0040s
 -- create_table("albums", {:force=>:cascade})
-   -> 0.0045s
+   -> 0.0021s
 ----
 
 [[find]]
