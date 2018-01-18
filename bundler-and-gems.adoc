@@ -26,25 +26,22 @@ to be installed by Bundler:
 .Gemfile
 ----
 source 'https://rubygems.org'
+git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-git_source(:github) do |repo_name|
-  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
-  "https://github.com/#{repo_name}.git"
-end
+ruby '2.5.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.1.0'
+gem 'rails', '~> 5.2.0'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
 # Use Puma as the app server
-gem 'puma', '~> 3.7'
+gem 'puma', '~> 3.11'
 # Use SCSS for stylesheets
-gem 'sass-rails', github: "rails/sass-rails"
-
+gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
-# gem 'therubyracer', platforms: :ruby
+# gem 'mini_racer', platforms: :ruby
 
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.2'
@@ -53,23 +50,31 @@ gem 'turbolinks', '~> 5'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.5'
 # Use Redis adapter to run Action Cable in production
-# gem 'redis', '~> 3.0'
+# gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
+# Use ActiveStorage variant
+# gem 'mini_magick', '~> 4.8'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
+
+# Reduces boot times through caching; required in config/boot.rb
+gem 'bootsnap', '>= 1.1.0', require: false
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   # Adds support for Capybara system testing and selenium driver
-  gem 'capybara', '~> 2.13.0'
+  gem 'capybara', '~> 2.15'
   gem 'selenium-webdriver'
+  # Easy installation and use of chromedriver to run system tests with Chrome
+  gem 'chromedriver-helper'
 end
 
 group :development do
-  # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
+  # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
   gem 'web-console', '>= 3.3.0'
   gem 'listen', '>= 3.0.5', '< 3.2'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
@@ -85,8 +90,8 @@ The format used is easy to explain: the word `gem` is followed by the
 name of the gem and then, if required, a specification of the version of
 the gem.
 
-For example, the line `gem 'rails', '5.1.0'` stands
-for "install the gem with the name `rails` in the version 5.1.0".
+For example, the line `gem 'rails', '5.2.0'` stands
+for "install the gem with the name `rails` in the version 5.2.0".
 
 With `~>` before the version number you can determine that the newest
 version after this version number should be installed. As a result, the
@@ -105,23 +110,26 @@ example, it looks like this:
 [source,config]
 .Gemfile.lock
 ----
-GIT
-  remote: https://github.com/rails/sass-rails.git
-  revision: dfbcc6a53653d8908007e26324a0f299f026ec4f
-  specs:
-    sass-rails (6.0.0.beta1)
-      railties (>= 4.0.0, < 5.1)
-      sass (~> 3.4)
-      sprockets (~> 4.x)
-      sprockets-rails (< 4.0)
-
 GEM
   remote: https://rubygems.org/
   specs:
-    actioncable (5.1.0)
-      actionpack (= 5.1.0)
+    actioncable (5.2.0)
+      actionpack (= 5.2.0)
       nio4r (~> 2.0)
       websocket-driver (~> 0.6.1)
+    actionmailer (5.2.0)
+      actionpack (= 5.2.0)
+      actionview (= 5.2.0)
+      activejob (= 5.2.0)
+      mail (~> 2.5, >= 2.5.4)
+      rails-dom-testing (~> 2.0)
+    actionpack (5.2.0)
+      actionview (= 5.2.0)
+      activesupport (= 5.2.0)
+      rack (~> 2.0)
+      rack-test (>= 0.6.3)
+      rails-dom-testing (~> 2.0)
+      rails-html-sanitizer (~> 1.0, >= 1.0.2)
       [...]
 ----
 
@@ -219,15 +227,14 @@ available in a new version, you can do this via the command
 [source,bash]
 ----
 $ bundle outdated
-Fetching gem metadata from https://rubygems.org/...........
-Fetching version metadata from https://rubygems.org/...
-Fetching dependency metadata from https://rubygems.org/..
+The dependency tzinfo-data (>= 0) will be unused by any of the platforms Bundler is installing for. Bundler is installing for ruby but the dependency is only for x86-mingw32, x86-mswin32, x64-mingw32, java. To add those platforms to the bundle, run `bundle lock --add-platform x86-mingw32 x86-mswin32 x64-mingw32 java`.
+Fetching gem metadata from https://rubygems.org/.........
+Fetching gem metadata from https://rubygems.org/.
 Resolving dependencies....
 
 Outdated gems included in the bundle:
-  * hiredis (newest 0.6.1, installed 0.5.2)
-  * mime-types (newest 3.0, installed 2.99)
-  * mini_portile2 (newest 2.1.0, installed 2.0.0)
+  * archive-zip (newest 0.10.0, installed 0.7.0)
+  * websocket-driver (newest 0.7.0, installed 0.6.5)
 ----
 
 To update them you'll have to change the version numbers in `Gemfile`
@@ -265,12 +272,15 @@ case, you can install programs with the correct version via
 [source,bash]
 ----
 $ bundle install --binstubs
-Using rake 10.4.2
-Using i18n 0.7.0
+Using rake 12.3.0
+Using concurrent-ruby 1.0.5
+Using i18n 0.9.1
 [...]
-Using web-console 2.1.2
-Bundle complete! 12 Gemfile dependencies, 54 gems now installed.
-Use `bundle show [gemname]` to see where a bundled gem is installed.
+Using turbolinks 5.1.0
+Using uglifier 4.1.3
+Using web-console 3.5.1
+Bundle complete! 18 Gemfile dependencies, 76 gems now installed.
+Use `bundle info [gemname]` to see where a bundled gem is installed.
 ----
 
 Afterwards, you can always use these programs. Example:
