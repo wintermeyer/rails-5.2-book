@@ -51,6 +51,7 @@ Let's create a new Rails project for a suitable example:
 $ rails new redirect_example
 [...]
 $ cd redirect_example
+$ rails db:migrate
 ----
 
 Before we can redirect, we need a controller with at least two different
@@ -196,6 +197,7 @@ xref:scaffolding-and-rest#redirects[section "Redirects"]:
 $ rails new pingpong
       [...]
 $ cd pingpong
+$ rails db:migrate
 $ rails generate controller Game ping pong
       [...]
 ----
@@ -294,6 +296,7 @@ shop. First, we need to create a new Rails application:
 $ rails new scaffold-shop
   [...]
 $ cd scaffold-shop
+$ rails db:migrate
 ----
 
 Let’s look at the scaffolding options:
@@ -321,9 +324,9 @@ the scaffold for the products:
 [source,bash]
 ----
 $ rails generate scaffold product name 'price:decimal{7,2}'
-Running via Spring preloader in process 52261
+Running via Spring preloader in process 38321
       invoke  active_record
-      create    db/migrate/20170323161553_create_products.rb
+      create    db/migrate/20180118065756_create_products.rb
       create    app/models/product.rb
       invoke    test_unit
       create      test/models/product_test.rb
@@ -341,6 +344,7 @@ Running via Spring preloader in process 52261
       create      app/views/products/_form.html.erb
       invoke    test_unit
       create      test/controllers/products_controller_test.rb
+      create      test/system/products_test.rb
       invoke    helper
       create      app/helpers/products_helper.rb
       invoke      test_unit
@@ -348,8 +352,6 @@ Running via Spring preloader in process 52261
       create      app/views/products/index.json.jbuilder
       create      app/views/products/show.json.jbuilder
       create      app/views/products/_product.json.jbuilder
-      invoke  test_unit
-      create    test/system/products_test.rb
       invoke  assets
       invoke    coffee
       create      app/assets/javascripts/products.coffee
@@ -365,10 +367,10 @@ So we can directly call `rails db:migrate`:
 [source,bash]
 ----
 $ rails db:migrate
-== 20151218150127 CreateProducts: migrating ===================================
+== 20180118065756 CreateProducts: migrating ===================================
 -- create_table(:products)
-   -> 0.0023s
-== 20151218150127 CreateProducts: migrated (0.0024s) ==========================
+   -> 0.0014s
+== 20180118065756 CreateProducts: migrated (0.0015s) ==========================
 ----
 
 Let’s create the first six products in the `db/seeds.rb`.
