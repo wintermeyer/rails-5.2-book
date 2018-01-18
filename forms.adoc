@@ -69,7 +69,7 @@ and sets the local variable `person` with the content of `@person`.
 [source,erb]
 .app/views/people/_form.html.erb
 ----
-<%= form_with(model: person, local: true) do |f| %>
+<%= form_with(model: person, local: true) do |form| %>
   <% if person.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(person.errors.count, "error") %> prohibited this person from being saved:</h2>
@@ -83,17 +83,17 @@ and sets the local variable `person` with the content of `@person`.
   <% end %>
 
   <div class="field">
-    <%= f.label :first_name %>
-    <%= f.text_field :first_name %>
+    <%= form.label :first_name %>
+    <%= form.text_field :first_name %>
   </div>
 
   <div class="field">
-    <%= f.label :last_name %>
-    <%= f.text_field :last_name %>
+    <%= form.label :last_name %>
+    <%= form.text_field :last_name %>
   </div>
 
   <div class="actions">
-    <%= f.submit %>
+    <%= form.submit %>
   </div>
 <% end %>
 ----
@@ -139,19 +139,14 @@ method to uploads the data to the URL `/people`. The log shows:
 
 [source,bash]
 ----
-Started POST "/people" for 127.0.0.1 at 2017-03-24 18:20:03 +0100
+Started POST "/people" for 127.0.0.1 at 2018-01-18 12:56:46 +0100
 Processing by PeopleController#create as HTML
-  Parameters: {"utf8"=>"✓", "authenticity_token"=>"Vc...EAg==",
-  "person"=>{"first_name"=>"Stefan", "last_name"=>"Wintermeyer"},
-  "commit"=>"Create Person"}
-   (0.2ms)  begin transaction
-  SQL (1.1ms)  INSERT INTO "people" ("first_name", "last_name",
-  "created_at", "updated_at") VALUES (?, ?, ?, ?)  [["first_name", "Stefan"],
-  ["last_name", "Wintermeyer"], ["created_at", "2017-03-24 17:20:03.600013"],
-  ["updated_at", "2017-03-24 17:20:03.600013"]]
-   (1.0ms)  commit transaction
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"0wS2r9...", "person"=>{"first_name"=>"Stefan", "last_name"=>"Wintermeyer"}, "commit"=>"Create Person"}
+   (0.1ms)  begin transaction
+  Person Create (0.6ms)  INSERT INTO "people" ("first_name", "last_name", "created_at", "updated_at") VALUES (?, ?, ?, ?)  [["first_name", "Stefan"], ["last_name", "Wintermeyer"], ["created_at", "2018-01-18 11:56:46.889256"], ["updated_at", "2018-01-18 11:56:46.889256"]]
+   (0.9ms)  commit transaction
 Redirected to http://localhost:3000/people/1
-Completed 302 Found in 6ms (ActiveRecord: 2.3ms)
+Completed 302 Found in 9ms (ActiveRecord: 1.6ms)
 ----
 
 What happened in Rails?
@@ -206,14 +201,13 @@ file
 
 [source,bash]
 ----
-Started GET "/people/1" for 127.0.0.1 at 2017-03-24 18:20:03 +0100
+Started GET "/people/1" for 127.0.0.1 at 2018-01-18 12:56:46 +0100
 Processing by PeopleController#show as HTML
   Parameters: {"id"=>"1"}
-  Person Load (0.2ms)  SELECT  "people".* FROM "people"
-  WHERE "people"."id" = ? LIMIT ?  [["id", 1], ["LIMIT", 1]]
+  Person Load (0.2ms)  SELECT  "people".* FROM "people" WHERE "people"."id" = ? LIMIT ?  [["id", 1], ["LIMIT", 1]]
   Rendering people/show.html.erb within layouts/application
-  Rendered people/show.html.erb within layouts/application (1.0ms)
-Completed 200 OK in 17ms (Views: 11.6ms | ActiveRecord: 0.2ms)
+  Rendered people/show.html.erb within layouts/application (0.9ms)
+Completed 200 OK in 27ms (Views: 20.8ms | ActiveRecord: 0.2ms)
 ----
 
 The router answers to this request with
