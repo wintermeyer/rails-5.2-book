@@ -9,8 +9,8 @@ xref:scaffolding-and-rest#scaffolding-and-rest["Scaffolding and REST"] we came
 across _routes_. The configuration in `config/routes.rb` defines what happens in
 the Rails application when a user of a Rails application fetches a URL. A route
 can be static and dynamic and pass any dynamic values with variables to the
-controller. If several routes apply to a URL, the one that is listed at the top
-of `config/routes.rb` wins.
+controller. If several routes apply to the same URL, the one that is listed at
+the top of `config/routes.rb` wins.
 
 TIP: If you do not have much time, you can skip this chapter for now
      and get back to it later if you have any specific questions.
@@ -22,6 +22,7 @@ Let’s first build a test Rails application so we can experiment:
 $ rails new shop
   [...]
 $ cd shop
+$ rails db:migrate
 ----
 
 With `rails routes` we can display the routes of a project. Let’s try it
@@ -103,7 +104,7 @@ get "home/pong"
 [[naming-a-route]]
 === Naming a Route
 
-A route should also always have an internal name which doesn’t change.
+A route should always have an internal name which doesn’t change.
 In the section xref:routing#http-get-requests-for-singular-resources["HTTP Get
 Requests for Singular Resources"] there is the following route:
 
