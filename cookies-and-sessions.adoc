@@ -37,6 +37,7 @@ and displays the content, and the cookie is deleted on a third page.
 $ rails new cookie_jar
   [...]
 $ cd cookie_jar
+$ rails db:migrate
 $ rails generate controller home set_cookies show_cookies delete_cookies
   [...]
 ----
@@ -231,6 +232,7 @@ The basic application:
 $ rails new breadcrumbs
   [...]
 $ cd breadcrumbs
+$ rails db:migrate
 $ rails generate controller Home ping pong index
   [...]
 ----
