@@ -3,7 +3,7 @@
 
 Sometimes a specific piece of code takes a long time to run but doesn't need to
 run right away. An example is sending an e-mail after creating an order at the
-end of a online shopping workflow. It can take a couple of seconds to send an
+end of a online shopping workflow. It can take a long term to send an
 e-mail but you don't want your user to wait for that to happen within the
 controller. It makes more sense to use a queueing mechanism for these tasks.
 
@@ -20,8 +20,9 @@ example job which waits for 10 seconds and than logs an info message:
 $ rails new shop
   [...]
 $ cd shop
+$ rails db:migrate
 $ rails generate job example
-Running via Spring preloader in process 98344
+Running via Spring preloader in process 5301
       invoke  test_unit
       create    test/jobs/example_job_test.rb
       create  app/jobs/example_job.rb
@@ -53,14 +54,15 @@ $ rails console
 Running via Spring preloader in process 98485
 Loading development environment (Rails 5.2.0)
 >> ExampleJob.perform_later
-Enqueued ExampleJob (Job ID: bb6e9781-8ffb-4bf2-8dfc-8ac983ed8bf6)
-to Async(default)
-=> #<ExampleJob:0x007f816d466680 @arguments=[],
-@job_id="bb6e9781-8ffb-4bf2-8dfc-8ac983ed8bf6", @queue_name="default",
-@priority=nil, @executions=0,
-@provider_job_id="263a31ae-b33d-4a12-a603-22dfbba9cab7">
->> Performing ExampleJob (Job ID: bb6e9781-8ffb-4bf2-8dfc-8ac983ed8bf6)
-from Async(default)
+Enqueued ExampleJob (Job ID: 21526c3c-7839-49e7-975e-2a176a07dbc4) to Async(default)
+Performing ExampleJob (Job ID: 21526c3c-7839-49e7-975e-2a176a07dbc4) from Async(default)
+=> #<ExampleJob:0x007fceee71f498 @arguments=[], @job_id="21526c3c-7839-49e7-975e-2a176a07dbc4", @queue_name="default", @priority=nil, @executions=0, @provider_job_id="4c814d91-45d1-4c3e-a57a-3bfd08c1c56f">
+----
+
+Now you have to wait 10 seconds to see the following output in the console:
+
+[source,bash]
+----
 Just waited 10 seconds.
 Performed ExampleJob (Job ID: bb6e9781-8ffb-4bf2-8dfc-8ac983ed8bf6)
 from Async(default) in 10012.97ms
@@ -68,7 +70,7 @@ from Async(default) in 10012.97ms
 ?> exit
 ----
 
-The file `log/development.log` now contains the logging output.
+NOTE: The file `log/development.log` contains the logging output.
 
 A more concrete example of using jobs you'll find in the
 xref:action-mailer#action-mailer[Action Mailer chapter] where an e-mail gets
@@ -131,7 +133,7 @@ Bundler.require(*Rails.groups)
 module Shop
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 5.1
+    config.load_defaults 5.2
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
