@@ -50,12 +50,10 @@ $ rails generate scaffold user login_name first_name last_name birthday:date
     [...]
     invoke    test_unit
     create      test/controllers/users_controller_test.rb
+    create      test/system/users_test.rb
     invoke    helper
     create      app/helpers/users_helper.rb
     invoke      test_unit
-    [...]
-    invoke  test_unit
-    create    test/system/users_test.rb
     [...]
 $ rails db:migrate
     [...]
@@ -74,15 +72,14 @@ of development:
 [source,bash]
 ----
 $ rails test
-Running via Spring preloader in process 88110
-Run options: --seed 54773
+Running via Spring preloader in process 2440
+Run options: --seed 62885
 
 # Running:
 
 .......
 
-Finished in 0.994387s, 7.0395 runs/s, 9.0508 assertions/s.
-
+Finished in 1.361143s, 5.1427 runs/s, 6.6121 assertions/s.
 7 runs, 9 assertions, 0 failures, 0 errors, 0 skips
 ----
 
@@ -119,7 +116,7 @@ Run options: --seed 40163
 ....F
 
 Failure:
-UsersControllerTest#test_should_update_user [/Users/stefan/tmp/book/webshop/test/controllers/users_controller_test.rb:38]:
+UsersControllerTest#test_should_update_user [/.../webshop/test/controllers/users_controller_test.rb:38]:
 Expected response to be a <3XX: redirect>, but was a <200: OK>
 
 
@@ -128,7 +125,7 @@ bin/rails test test/controllers/users_controller_test.rb:36
 F
 
 Failure:
-UsersControllerTest#test_should_create_user [/Users/stefan/tmp/book/webshop/test/controllers/users_controller_test.rb:19]:
+UsersControllerTest#test_should_create_user [/.../webshop/test/controllers/users_controller_test.rb:19]:
 "User.count" didn't change by 1.
 Expected: 3
   Actual: 2
@@ -161,13 +158,13 @@ one:
   login_name: MyString
   first_name: MyString
   last_name: MyString
-  birthday: 2017-03-25
+  birthday: 2018-01-25
 
 two:
   login_name: MyString
   first_name: MyString
   last_name: MyString
-  birthday: 2017-03-25
+  birthday: 2018-01-25
 ----
 
 There are two example records there that do not fulfill the requirements
@@ -181,13 +178,13 @@ one:
   login_name: MyString12
   first_name: MyString
   last_name: MyString
-  birthday: 2017-03-25
+  birthday: 2018-01-25
 
 two:
   login_name: MyString12
   first_name: MyString
   last_name: MyString
-  birthday: 2017-03-25
+  birthday: 2018-01-25
 ----
 
 Now, a `rails test` completes without any errors again:
@@ -257,7 +254,7 @@ occurred:
 ----
 Failure:
 UsersControllerTest#test_should_create_user
-[/Users/stefan/tmp/book/webshop/test/controllers/users_controller_test.rb:19]:
+[/.../webshop/test/controllers/users_controller_test.rb:19]:
 "User.count" didn't change by 1.
 Expected: 3
   Actual: 2
@@ -525,7 +522,7 @@ With _fixtures_ you can generate example data for tests. The default
 format for this is YAML. The files for this can be found in the
 directory `test/fixtures/` and are automatically created with
 `rails generate scaffold`. But of course you can also define your own
-files. All fixtures are loaded anew into the test database by default
+files. All fixtures are loaded new into the test database by default
 with every test.
 
 Examples for alternative formats (e.g. CSV) can be found at
@@ -652,7 +649,7 @@ well.
 == rails stats
 
 rails stats With `rails stats` you get an overview of your Rails project.
-For our example, it looks like this:
+For an example, it looks like this:
 
 [source,bash]
 ----
@@ -691,3 +688,7 @@ not say anything about the quality of tests.
 We just scratched the surface of the topic TDD in Rails. Have a
 look at http://guides.rubyonrails.org/testing.html for more information.
 There you will also find several good examples on this topic.
+
+One cool feature of Ruby on Rails testing is the ability to 
+run the tests in real browsers (e.g. Chrome) and to take screenshots
+while doing so.
