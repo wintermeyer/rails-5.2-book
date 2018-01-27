@@ -46,6 +46,7 @@ info.
 $ rails new shop-i18n
   [...]
 $ cd shop-i18n
+$ rails db:migrate
 $ echo "gem 'rails-i18n'" >> Gemfile
 $ bundle
   [...]
@@ -461,7 +462,7 @@ easily switch to multilingual use if required.
 [source,erb]
 .app/views/books/_form.html.erb
 ----
-<%= form_with(model: book, local: true) do |f| %>
+<%= form_with(model: book, local: true) do |form| %>
   <% if book.errors.any? %>
     <div id="error_explanation">
       <h2><%= t 'activerecord.errors.template.header', :model =>
@@ -476,22 +477,22 @@ easily switch to multilingual use if required.
   <% end %>
 
   <div class="field">
-    <%= f.label :title %>
-    <%= f.text_field :title %>
+    <%= form.label :title %>
+    <%= form.text_field :title %>
   </div>
 
   <div class="field">
-    <%= f.label :number_of_pages %>
-    <%= f.number_field :number_of_pages %>
+    <%= form.label :number_of_pages %>
+    <%= form.number_field :number_of_pages %>
   </div>
 
   <div class="field">
-    <%= f.label :price %>
-    <%= f.text_field :price %>
+    <%= form.label :price %>
+    <%= form.text_field :price %>
   </div>
 
   <div class="actions">
-    <%= f.submit %>
+    <%= form.submit %>
   </div>
 <% end %>
 ----
