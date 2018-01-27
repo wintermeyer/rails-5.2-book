@@ -98,7 +98,7 @@ end
 ----
 
 In it, we change the `new_account` method to accept a parameter with
-`new_account(user)`` and some code to use that to send the
+`new_account(user)` and some code to use that to send the
 confirmation e-mail.
 
 [source,ruby]
@@ -168,7 +168,8 @@ end
 
 Let’s create a new `User` in the console.
 
-NOTE: I'll take a moment for ActiveJob to send the email. Be patient.
+NOTE: I'll take a moment for ActiveJob to send the email. It's using
+      Active Job to queue it. Be patient.
 
 [source,bash]
 ----
@@ -177,43 +178,31 @@ Running via Spring preloader in process 1795
 Loading development environment (Rails 5.2.0)
 >> User.create(name: "Wintermeyer", email: "sw@wintermeyer-consulting.de")
    (0.1ms)  begin transaction
-  SQL (0.5ms)  INSERT INTO "users" ("name", "email", "created_at",
-  "updated_at") VALUES (?, ?, ?, ?)  [["name", "Wintermeyer"],
-  ["email", "sw@wintermeyer-consulting.de"], ["created_at",
-  "2017-03-25 10:50:18.242475"], ["updated_at",
-  "2017-03-25 10:50:18.242475"]]
-Enqueued ActionMailer::DeliveryJob
-(Job ID: a902ec6f-3b61-4c4c-8d75-d82acb663572) to Async(mailers) with
-arguments: "NotificationMailer", "new_account", "deliver_now",
-#<GlobalID:0x007fe31dcb3920 @uri=#<URI::GID gid://webshop/User/1>>
-   (1.1ms)  commit transaction
-=> #<User id: 1, name: "Wintermeyer", email: "sw@wintermeyer-consulting.de",
-created_at: "2017-03-25 10:50:18", updated_at: "2017-03-25 10:50:18">
->>   User Load (0.1ms)  SELECT  "users".* FROM "users"
-WHERE "users"."id" = ? LIMIT ?  [["id", 1], ["LIMIT", 1]]
-Performing ActionMailer::DeliveryJob
-(Job ID: a902ec6f-3b61-4c4c-8d75-d82acb663572) from Async(mailers) with
-arguments: "NotificationMailer", "new_account", "deliver_now",
-#<GlobalID:0x007fe31f800ac0 @uri=#<URI::GID gid://webshop/User/1>>
+  User Create (0.4ms)  INSERT INTO "users" ("name", "email", "created_at", "updated_at") VALUES (?, ?, ?, ?)  [["name", "Wintermeyer"], ["email", "sw@wintermeyer-consulting.de"], ["created_at", "2018-01-27 16:21:32.093810"], ["updated_at", "2018-01-27 16:21:32.093810"]]
+Enqueued ActionMailer::DeliveryJob (Job ID: de33ce3d-9671-4957-8b89-65b8d3000820) to Async(mailers) with arguments: "NotificationMailer", "new_account", "deliver_now", #<GlobalID:0x007ffe488addf8 @uri=#<URI::GID gid://shop4/User/1>>
+   (3.2ms)  commit transaction
+=> #<User id: 1, name: "Wintermeyer", email: "sw@wintermeyer-consulting.de", created_at: "2018-01-27 16:21:32", updated_at: "2018-01-27 16:21:32">
+>>   User Load (0.3ms)  SELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?  [["id", 1], ["LIMIT", 1]]
+Performing ActionMailer::DeliveryJob (Job ID: de33ce3d-9671-4957-8b89-65b8d3000820) from Async(mailers) with arguments: "NotificationMailer", "new_account", "deliver_now", #<GlobalID:0x007ffe45f84120 @uri=#<URI::GID gid://shop4/User/1>>
   Rendering notification_mailer/new_account.html.erb within layouts/mailer
-  Rendered notification_mailer/new_account.html.erb within layouts/mailer (0.8ms)
+  Rendered notification_mailer/new_account.html.erb within layouts/mailer (6.7ms)
   Rendering notification_mailer/new_account.text.erb within layouts/mailer
-  Rendered notification_mailer/new_account.text.erb within layouts/mailer (0.3ms)
-NotificationMailer#new_account: processed outbound mail in 141.0ms
-Sent mail to sw@wintermeyer-consulting.de (26.2ms)
-Date: Sat, 25 Mar 2017 11:50:28 +0100
+  Rendered notification_mailer/new_account.text.erb within layouts/mailer (0.4ms)
+NotificationMailer#new_account: processed outbound mail in 792.9ms
+Sent mail to sw@wintermeyer-consulting.de (31.8ms)
+Date: Sat, 27 Jan 2018 17:21:43 +0100
 From: from@example.com
 To: sw@wintermeyer-consulting.de
-Message-ID: <58d64b749f300_7033ff18ee59aec3913f@SW.local.mail>
+Message-ID: <5a6ca717456a9_183a3fff24456d442550@sw.mail>
 Subject: Account Wintermeyer is active
 Mime-Version: 1.0
 Content-Type: multipart/alternative;
- boundary="--==_mimepart_58d64b749dc0c_7033ff18ee59aec39018";
+ boundary="--==_mimepart_5a6ca7174371d_183a3fff24456d44254be";
  charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 
-----==_mimepart_58d64b749dc0c_7033ff18ee59aec39018
+----==_mimepart_5a6ca7174371d_183a3fff24456d44254be
 Content-Type: text/plain;
  charset=UTF-8
 Content-Transfer-Encoding: 7bit
@@ -226,7 +215,7 @@ Have a great day!
   A Robot
 
 
-----==_mimepart_58d64b749dc0c_7033ff18ee59aec39018
+----==_mimepart_5a6ca7174371d_183a3fff24456d44254be
 Content-Type: text/html;
  charset=UTF-8
 Content-Transfer-Encoding: 7bit
@@ -249,11 +238,9 @@ Content-Transfer-Encoding: 7bit
   </body>
 </html>
 
-----==_mimepart_58d64b749dc0c_7033ff18ee59aec39018--
+----==_mimepart_5a6ca7174371d_183a3fff24456d44254be--
 
-Performed ActionMailer::DeliveryJob
-(Job ID: a902ec6f-3b61-4c4c-8d75-d82acb663572) from Async(mailers)
-in 177.32ms
+Performed ActionMailer::DeliveryJob (Job ID: de33ce3d-9671-4957-8b89-65b8d3000820) from Async(mailers) in 842.52ms
 >> exit
 ----
 
@@ -339,7 +326,7 @@ This means the sent e-mail would look like this:
 [source,text]
 ----
 Sent mail to sw@wintermeyer-consulting.de (50ms)
-Date: Wed, 30 May 2012 17:35:21 +0200
+Date: Sat, 27 Jan 2018 17:35:21 +0200
 From: from@example.com
 To: sw@wintermeyer-consulting.de
 Message-ID: <4fc63e39e356a_aa083fe366028cd8803c7@MacBook.local.mail>
@@ -361,7 +348,7 @@ Have a great day!
 [[attachments]]
 == Attachments
 
-E-mail attachments are also defined in the controller.
+E-mail attachments can be defined too.
 
 As an example we add in `app/mailers/notification_mailer.rb` the
 Rails image `app/assets/images/rails.png` to an e-mail as attachment:
