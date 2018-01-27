@@ -36,4 +36,4 @@ include::action-cable.adoc[]
 
 include::production-webserver.adoc[]
 
-include::secrets.adoc[]
+include::credentials.adoc[]
