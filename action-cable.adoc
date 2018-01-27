@@ -10,9 +10,10 @@ technical aspects of websockets.
 
 The use of Action Cable always includes JavaScript and this book is
 about Ruby and Ruby on Rails. So I will only show you a minimal
-Hello World example of how Action Cable works.
+Hello World example of how Action Cable works to give you an idea how
+to proceed.
 
-== Hello World ActionCable Example
+== Hello World Action Cable Example
 
 In our first example we are going to push content from the Rails console
 into a browser which shows the `page#index` view.
@@ -26,11 +27,12 @@ Please create the following Rails application:
 $ rails new hello-world-action-cable
   [...]
 $ cd hello-world-action-cable
+$ rails db:migrate
 $ rails generate controller page index
   [...]
 ----
 
-A root route so that we can access the page at
+Add a root route so that we can access the page at
 http://localhost:3000
 
 [source,ruby]
@@ -55,11 +57,11 @@ The content of the view:
 === Setting up jQuery
 
 We are going to append HTML to `<div id="messages"></div>` in the DOM.
-To do that we need https://jquery.com[jQuery] which is not installed by
-default in Rails 5.2 any more. There are two ways of doing this.
+To do that we use https://jquery.com[jQuery] which is not installed by
+default in Rails any more. There are two ways of doing this.
 The old way was to add `gem 'jquery-rails'` followed by a `bundle`. This
-still works but Rails 5.2 has yarn build in and that is the new way of
-tackle the . If you haven't installed yarn yet have a look at
+still works but Rails 5.2 has yarn build in and that is the new way.
+If you haven't installed yarn yet have a look at
 https://yarnpkg.com/en/docs/install
 
 If you are using macOS and https://brew.sh[Homebrew] you can install
@@ -75,7 +77,7 @@ Within Rails 5.2 you can use yarn now to install jQuery:
 [source,bash]
 ----
 $ bin/yarn add jquery
-yarn add v0.21.3
+yarn add v1.3.2
 info No lockfile found.
 [1/4] 🔍  Resolving packages...
 [2/4] 🚚  Fetching packages...
@@ -83,8 +85,8 @@ info No lockfile found.
 [4/4] 📃  Building fresh packages...
 success Saved lockfile.
 success Saved 1 new dependency.
-└─ jquery@3.2.1
-✨  Done in 1.57s.
+└─ jquery@3.3.1
+✨  Done in 0.52s.
 ----
 
 To load 'jQuery' we have to add it in the
@@ -95,26 +97,27 @@ To load 'jQuery' we have to add it in the
 ----
 //= require jquery
 //= require rails-ujs
+//= require activestorage
 //= require turbolinks
 //= require_tree .
 ----
 
 === Creating a Channel
 
-Rails provides a handy generator to create a new channel.
-We call our channel "WebNotifications".
+Rails provides a handy generator to create a new channel which we need to
+push information to the client. We call our channel "WebNotifications".
 
 [source,bash]
 ----
 $ rails generate channel WebNotifications
-Running via Spring preloader in process 17653
+Running via Spring preloader in process 13267
       create  app/channels/web_notifications_channel.rb
    identical  app/assets/javascripts/cable.js
       create  app/assets/javascripts/channels/web_notifications.coffee
 ----
 
 When ever somebody requests the `page#index` view we want him/her to
-automatically subscribe to our the `WebNotificationsChannel` channel.
+automatically subscribe to the `WebNotificationsChannel` channel.
 We do this by adding this piece of CoffeeScript:
 
 [source,javascript]
@@ -144,13 +147,12 @@ We are going to start a `rails server` and a `rails console`
 in separate terminals. We need to use the Redis gem to make
 this work. This is not the default in the development setup.
 
-We have to activate the Redis gem by including this line in
-the 'Gemfile'
+To activate the Redis gem by include this line in the 'Gemfile':
 
 [source,ruby]
 .Gemfile
 ----
-gem 'redis', '~> 3.0'
+gem 'redis', '~> 4.0'
 ----
 
 After that change you have to run 'bundle' once more:
@@ -160,9 +162,9 @@ After that change you have to run 'bundle' once more:
 $ bundle
 ----
 
-TIP: If you are running macOS and `brew` you can install
-     Redis with `brew install redis` and start it with
-     `brew services start redis`.
+Obviously you need a running Redis server. If you are running
+macOS with Homebrew you can install Redis with `brew install redis`
+and start it with `brew services start redis`.
 
 And we have to configure the use of Redis:
 
@@ -178,7 +180,27 @@ development: *redis
 test: *redis
 ----
 
-Finally it's time to start up our development rails server:
+To make things a little bit more complicated we have to
+configure `config/initializers/content_security_policy.rb`
+to allow the use of Action Cable in the development
+environment by adding `p.connect_src :self, :https, 'ws://localhost:3000'`:
+
+[source,ruby]
+.config/initializers/content_security_policy.rb
+----
+Rails.application.config.content_security_policy do |p|
+  p.default_src :self, :https
+  p.font_src    :self, :https, :data
+  p.img_src     :self, :https, :data
+  p.object_src  :none
+  p.script_src  :self, :https
+  p.style_src   :self, :https, :unsafe_inline
+  p.connect_src :self, :https, 'ws://localhost:3000'
+end
+----
+
+Finally it's time to start up our development rails server
+in the first terminal:
 
 [source,bash]
 ----
@@ -190,17 +212,23 @@ log you'll see this entry:
 
 [source,log]
 ----
-Finished "/cable/" [WebSocket] for 127.0.0.1 at 2017-03-30 08:33:41 +0200
+Started GET "/" for 127.0.0.1 at 2018-01-27 23:30:56 +0100
+Processing by PageController#index as HTML
+  Rendering page/index.html.erb within layouts/application
+  Rendered page/index.html.erb within layouts/application (1.5ms)
+Completed 200 OK in 236ms (Views: 221.8ms | ActiveRecord: 0.0ms)
+
+
+Finished "/cable/" [WebSocket] for 127.0.0.1 at 2018-01-27 23:30:56 +0100
 WebNotificationsChannel stopped streaming from web_notifications_channel
-Started GET "/cable" for 127.0.0.1 at 2017-03-30 08:33:41 +0200
-Started GET "/cable/" [WebSocket] for 127.0.0.1 at 2017-03-30 08:33:41 +0200
-Successfully upgraded to WebSocket (REQUEST_METHOD: GET,
-HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+Started GET "/cable" for 127.0.0.1 at 2018-01-27 23:30:56 +0100
+Started GET "/cable/" [WebSocket] for 127.0.0.1 at 2018-01-27 23:30:56 +0100
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
 WebNotificationsChannel is transmitting the subscription confirmation
 WebNotificationsChannel is streaming from web_notifications_channel
 ----
 
-Now start a new terminal and go to the directory where your
+Now start a second terminal and go to the directory where your
 Rails project is locate. Fire up the console and use
 `ActionCable.server.broadcast` to broadcast a message to
 `web_notifications_channel`:
