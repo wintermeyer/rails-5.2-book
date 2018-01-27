@@ -181,7 +181,7 @@ test: *redis
 ----
 
 To make things a little bit more complicated we have to
-configure `config/initializers/content_security_policy.rb`
+configure the Content-Security-Policy in `config/initializers/content_security_policy.rb`
 to allow the use of Action Cable in the development
 environment by adding `p.connect_src :self, :https, 'ws://localhost:3000'`:
 
@@ -198,6 +198,9 @@ Rails.application.config.content_security_policy do |p|
   p.connect_src :self, :https, 'ws://localhost:3000'
 end
 ----
+
+TIP: Have a look at https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
+     for more info about Content-Security-Policy (CSP).
 
 Finally it's time to start up our development rails server
 in the first terminal:
