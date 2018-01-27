@@ -2,14 +2,15 @@
 = Asset Pipeline
 
 The asset pipeline offers the Rails developer the opportunity of delivering CSS,
-JavaScript and image files to the browser more optimally - in other words, in a
-more compressed form and therefore more quickly. Different CSS files are
-combined into one big file and delivered to the browser with a fingerprint in
-the file name. This fingerprinting enables the browser and any proxy in between
-to optimally cache the data, so the browser can load these files more quickly.
+JavaScript and image files to the browser more optimally. Depending on the type
+this can be a compression or a file name fingerprint. Different CSS files are
+combined into one big file. The fingerprinting enables the browser and any proxy in between
+to optimally cache the data, so the browser can load these files more quickly
+on subsequent visits.
 
-NOTE: In case you are running on HTTP/2 is might be a good idea to
-      break up this flow into smaller chunks to optimize HTTP-Caching.
+NOTE: When running your webserver on HTTP/2 it might be a good idea to
+      break up this flow into smaller chunks to optimize HTTP-Caching. But
+      that depends on the specifics of your web application.
 
 Within the asset pipeline, you can program CSS, SASS, JavaScript and
 CoffeeScript extensively and clearly, in order to let them be delivered later as
@@ -64,6 +65,7 @@ content:
 // [...]
 //
 //= require rails-ujs
+//= require activestorage
 //= require turbolinks
 //= require_tree .
 ----
@@ -102,18 +104,18 @@ http://localhost:3000/assets/application.css
 
 When using the asset pipeline, you need to remember that you have to
 precompile the assets before starting the Rails server in the production
-environment. This happens via the command `rails assets:precompile`
+environment. This happens via the command `rails assets:precompile` with a
+prefixed `RAILS_ENV=production` for the production environment.
 
 [source,bash]
 ----
-$ rails assets:precompile
+$ RAILS_ENV=production bin/rails assets:precompile
 Yarn executable was not detected in the system.
 Download Yarn at https://yarnpkg.com/en/docs/install
-I, [2017-03-27T11:02:40.042715 #29512]  INFO -- :
-Writing /[...]/assets/manifest-e761...76d3b6b45692a920c8d04.js
-I, [2017-03-27T11:02:40.043501 #29512]  INFO -- :
-Writing /[...]/assets/manifest-e761...76d3b6b45692a920c8d04.js.gz
-[...]
+I, [2018-01-27T17:56:51.650389 #8573]  INFO -- : Writing /.../public/assets/application-9eca361cfc054d474ebb4c8c6b16465dd4cd42664fe474b8d9a52573c1e2d2e3.js
+I, [2018-01-27T17:56:51.656011 #8573]  INFO -- : Writing /.../public/assets/application-9eca361cfc054d474ebb4c8c6b16465dd4cd42664fe474b8d9a52573c1e2d2e3.js.gz
+I, [2018-01-27T17:56:51.700670 #8573]  INFO -- : Writing /.../public/assets/application-35729bfbaf9967f119234595ed222f7ab14859f304ab0acc5451afb387f637fa.css
+I, [2018-01-27T17:56:51.700920 #8573]  INFO -- : Writing /.../public/assets/application-35729bfbaf9967f119234595ed222f7ab14859f304ab0acc5451afb387f637fa.css.gz
 ----
 
 If you forget to do this, you will find the following error message in
@@ -130,20 +132,14 @@ The files created by `rails assets:precompile` appear in the directory
 [source,bash]
 ----
 public/assets/
-├── application-68387...a0a1a902.js
-├── application-68387...a0a1a902.js.gz
-├── application-e51e...312ac.css
-├── application-e51e...312ac.css.gz
-├── cable-160...c1b10.js
-├── cable-160...c1b10.js.gz
-├── manifest-e761...8d04.js
-├── manifest-e761...8d04.js.gz
-├── products-571...4bf.css
-├── products-571...4bf.css.gz
-├── products-85...18fcb.js
-├── products-85...18fcb.js.gz
-├── scaffolds-c6fc...ee5e1.css
-└── scaffolds-c6fc...ee5e1.css.gz
+├── application-35729bfbaf9967f119234595ed222f7ab14859f304ab0acc5451afb387f637fa.css
+├── application-35729bfbaf9967f119234595ed222f7ab14859f304ab0acc5451afb387f637fa.css.gz
+├── application-443bf66d6410ac6de6fd02a73fd8279e83ae0baee64d3832cc67a0909e8329d9.css
+├── application-443bf66d6410ac6de6fd02a73fd8279e83ae0baee64d3832cc67a0909e8329d9.css.gz
+├── application-9eca361cfc054d474ebb4c8c6b16465dd4cd42664fe474b8d9a52573c1e2d2e3.js
+├── application-9eca361cfc054d474ebb4c8c6b16465dd4cd42664fe474b8d9a52573c1e2d2e3.js.gz
+├── application-b59f735b008e94c6f72a3b7c43cf31aea2ab324386b7a378482d17887e683a61.js
+└── application-b59f735b008e94c6f72a3b7c43cf31aea2ab324386b7a378482d17887e683a61.js.gz
 ----
 
 Go ahead and use your favorite editor to have a look at the created
