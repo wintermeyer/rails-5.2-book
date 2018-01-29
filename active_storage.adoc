@@ -242,3 +242,5 @@ def update
 end
 [...]
 ----
+
+Now you can use the Web-GUI to upload new avatars.
