@@ -1,0 +1,244 @@
+[[active-storage]]
+= Active Storage
+
+Ruby on Rails 5.2 introduced Active Storage which can be used to attach files
+(e.g. avatar images) to objects and store those files on the server or in the
+cloud.
+
+Active Storage can not just store files but also convert or resize them. But
+here I just show you how to attach a file to give you the basic idea.
+
+== Avatar Example
+
+First of all I'm sorry for not coming up with a more original example. Everybody
+uses avatars to describe how to attach something. I do it too because it is
+such a common use case.
+
+We create a new phone book application which stores basic user information in
+the User model:
+
+[source,bash]
+----
+$ rails new phone_book
+  [...]
+$ cd phone_book
+$ rails generate scaffold User first_name last_name email_address
+$ rails db:migrate
+----
+
+We want to add an avatar image to each user. To work with images we have to have
+access to the Imagemagick (https://www.imagemagick.org/) software. Please install
+it with the package manager of your choice (for macOS Homebrew users
+`brew install imagemagick` will do the trick). On the Rails side we have to
+activate the `mini_magick` gem. Please open your 'Gemfile' and search for it.
+You need to active it by deleting the prefixed `#`:
+
+[source,ruby]
+.Gemfile
+----
+[...]
+# Use ActiveStorage variant
+gem 'mini_magick', '~> 4.8'
+[...]
+----
+
+After that run `bundle`
+
+[source,bash]
+----
+$ bundle
+----
+
+To use Active Storage we have to add a migration with `rails active_storage:install`:
+
+[source,ruby]
+----
+$ rails active_storage:install
+$ rails db:migrate
+== 20180128074248 CreateActiveStorageTables: migrating ========================
+-- create_table(:active_storage_blobs)
+  -> 0.0020s
+-- create_table(:active_storage_attachments)
+  -> 0.0018s
+== 20180128074248 CreateActiveStorageTables: migrated (0.0040s) ===============
+----
+
+This table will take care of all the storage information. We don't have
+to change the user table at all to add an avatar. We can do that in the model.
+
+[source,ruby]
+.app/models/user.rb
+----
+class User < ApplicationRecord
+  has_one_attached :avatar
+end
+----
+
+Now you have access to the `avatar` method in the `User` model which is the key
+for working with it. Let's create a new user in the console and attach an image
+from the local file system as an avatar to it:
+
+[source,bash]
+----
+$ rails console
+Loading development environment (Rails 5.2.0)
+>> user = User.create(first_name: "Stefan", last_name: "Wintermeyer")
+  (0.1ms)  begin transaction
+ User Create (1.4ms)  INSERT INTO "users" ("first_name", "last_name", "created_at", "updated_at") VALUES (?, ?, ?, ?)  [["first_name", "Stefan"], ["last_name", "Wintermeyer"], ["created_at", "2018-01-28 09:47:23.769721"], ["updated_at", "2018-01-28 09:47:23.769721"]]
+  (1.5ms)  commit transaction
+=> #<User id: 1, first_name: "Stefan", last_name: "Wintermeyer", email_address: nil, created_at: "2018-01-28 09:47:23", updated_at: "2018-01-28 09:47:23">
+>> user.avatar.attach(io: File.open("/Users/xyz/Desktop/stefan-wintermeyer.jpg"), filename: "stefan-wintermeyer.jpg", content_type: "image/jpg")
+ ActiveStorage::Attachment Load (0.5ms)  SELECT  "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?  [["record_id", 1], ["record_type", "User"], ["name", "avatar"], ["LIMIT", 1]]
+ Disk Storage (3.1ms) Uploaded file to key: C8uKHdsuSemKP1iJXDcB5Kcf (checksum: FW5KA5+afBfLJ+HMFEtVfA==)
+  (0.1ms)  begin transaction
+ ActiveStorage::Blob Create (1.0ms)  INSERT INTO "active_storage_blobs" ("key", "filename", "content_type", "byte_size", "checksum", "created_at") VALUES (?, ?, ?, ?, ?, ?)  [["key", "C8uKHdsuSemKP1iJXDcB5Kcf"], ["filename", "stefan-wintermeyer.jpg"], ["content_type", "image/jpg"], ["byte_size", 199263], ["checksum", "FW5KA5+afBfLJ+HMFEtVfA=="], ["created_at", "2018-01-28 09:48:15.946522"]]
+  (0.9ms)  commit transaction
+  (0.1ms)  begin transaction
+ ActiveStorage::Attachment Create (0.9ms)  INSERT INTO "active_storage_attachments" ("name", "record_type", "record_id", "blob_id", "created_at") VALUES (?, ?, ?, ?, ?)  [["name", "avatar"], ["record_type", "User"], ["record_id", 1], ["blob_id", 1], ["created_at", "2018-01-28 09:48:15.971930"]]
+ User Update All (0.1ms)  UPDATE "users" SET "updated_at" = '2018-01-28 09:48:15.974030' WHERE "users"."id" = ?  [["id", 1]]
+  (1.1ms)  commit transaction
+Enqueued ActiveStorage::AnalyzeJob (Job ID: 9c978cdf-4517-445a-a45b-11194be8f0e7) to Async(default) with arguments: #<GlobalID:0x007ff7a42fef10 @uri=#<URI::GID gid://phone-book/ActiveStorage::Blob/1>>
+ ActiveStorage::Blob Load (0.2ms)  SELECT  "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?  [["id", 1], ["LIMIT", 1]]
+=> #<ActiveStorage::Attachment id: 1, name: "avatar", record_type: "User", record_id: 1, blob_id: 1, created_at: "2018-01-28 09:48:15">
+>> Performing ActiveStorage::AnalyzeJob (Job ID: 9c978cdf-4517-445a-a45b-11194be8f0e7) from Async(default) with arguments: #<GlobalID:0x007ff7a42c7268 @uri=#<URI::GID gid://phone-book/ActiveStorage::Blob/1>>
+  (0.1ms)  begin transaction
+ ActiveStorage::Blob Update (0.5ms)  UPDATE "active_storage_blobs" SET "metadata" = ? WHERE "active_storage_blobs"."id" = ?  [["metadata", "{\"width\":1280,\"height\":1280,\"analyzed\":true}"], ["id", 1]]
+  (0.9ms)  commit transaction
+Performed ActiveStorage::AnalyzeJob (Job ID: 9c978cdf-4517-445a-a45b-11194be8f0e7) from Async(default) in 96.79ms
+----
+
+You can use the `avatar.attached?` method to check if a given user object has
+an avatar attached:
+[source,bash]
+----
+>> user.avatar.attached?
+  ActiveStorage::Attachment Load (0.2ms)  SELECT  "active_storage_attachments".* FROM "active_storage_attachments" WHERE "active_storage_attachments"."record_id" = ? AND "active_storage_attachments"."record_type" = ? AND "active_storage_attachments"."name" = ? LIMIT ?  [["record_id", 1], ["record_type", "User"], ["name", "avatar"], ["LIMIT", 1]]
+  ActiveStorage::Blob Load (0.1ms)  SELECT  "active_storage_blobs".* FROM "active_storage_blobs" WHERE "active_storage_blobs"."id" = ? LIMIT ?  [["id", 1], ["LIMIT", 1]]
+=> true
+----
+
+To see that avatar you have to update your show view to this code:
+
+[source,erb]
+.app/views/users/show.html.erb
+----
+<p id="notice"><%= notice %></p>
+
+<% if @user.avatar.attached? %>
+<p>
+  <%= image_tag(url_for(@user.avatar)) %>
+<p>
+<% end %>
+
+<p>
+  <strong>First name:</strong>
+  <%= @user.first_name %>
+</p>
+
+<p>
+  <strong>Last name:</strong>
+  <%= @user.last_name %>
+</p>
+
+<p>
+  <strong>Email address:</strong>
+  <%= @user.email_address %>
+</p>
+
+<%= link_to 'Edit', edit_user_path(@user) %> |
+<%= link_to 'Back', users_path %>
+----
+
+`url_for(@user.avatar)` will create a URL for the avatar. The image itself
+is stored in the database as a blob. Active Storage does all the magic needed
+to make this possible.
+
+Uploading from the console is nice but normally we want to have a way to
+upload something from within a form. So let's update our form to make this
+happen:
+
+[source,ruby]
+.app/views/users/_form.html.erb
+----
+<%= form_with(model: user, local: true) do |form| %>
+  <% if user.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h2>
+
+      <ul>
+      <% user.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :first_name %>
+    <%= form.text_field :first_name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :last_name %>
+    <%= form.text_field :last_name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :email_address %>
+    <%= form.text_field :email_address %>
+  </div>
+
+  <div class="field">
+    <%= form.label :avatar %>
+    <%= form.file_field :avatar %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
+----
+
+But that is not enough. We have to add the part were we attach the avatar to
+the user object in the create and update methods in the users controller:
+
+[source,ruby]
+.app/controllers/users_controller.rb
+----
+[...]
+def create
+  @user = User.new(user_params)
+  avatar = params[:user][:avatar]
+
+  respond_to do |format|
+    if @user.save
+      if avatar
+        @user.avatar.attach(avatar)
+      end
+      format.html { redirect_to @user, notice: 'User was successfully created.' }
+      format.json { render :show, status: :created, location: @user }
+    else
+      format.html { render :new }
+      format.json { render json: @user.errors, status: :unprocessable_entity }
+    end
+  end
+end
+
+def update
+  avatar = params[:user][:avatar]
+
+  respond_to do |format|
+    if @user.update(user_params)
+      if avatar
+        @user.avatar.attach(avatar)
+      end
+      format.html { redirect_to @user, notice: 'User was successfully updated.' }
+      format.json { render :show, status: :ok, location: @user }
+    else
+      format.html { render :edit }
+      format.json { render json: @user.errors, status: :unprocessable_entity }
+    end
+  end
+end
+[...]
+----

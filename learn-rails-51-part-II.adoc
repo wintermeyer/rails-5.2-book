@@ -16,10 +16,6 @@ v5.1.0, 2016-04-16
 :pdf-page-size: [6in, 9in]
 ifndef::ebook-format[:leveloffset: +1]
 
-include::preface2.adoc[]
-
-include::how-to.adoc[]
-
 include::test-driven-development.adoc[]
 
 include::active-job.adoc[]
@@ -37,3 +33,5 @@ include::action-cable.adoc[]
 include::production-webserver.adoc[]
 
 include::credentials.adoc[]
+
+include::active_storage.adoc[]
