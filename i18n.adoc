@@ -11,7 +11,7 @@ But even if you want to create a web page that only uses one language (other
 than English), you will need to dive into this chapter. It is not enough to just
 translate the views. Because already if you use
 xref:scaffolding-and-rest#scaffolding-and-rest[scaffolding], you will need to
-take care of the English and therefore not yet translated validation errors.
+take care of the not yet translated validation errors.
 
 The class `I18n` is responsible for anything to do with translation in the Rails
 application. It offers two important methods for this purpose:
@@ -312,6 +312,8 @@ $ rails generate scaffold book title number_of_pages:integer \
   [...]
 $ rails db:migrate
   [...]
+$ echo "gem 'rails-i18n'" >> Gemfile
+$ bundle
 $
 ----
 
@@ -646,7 +648,7 @@ class BooksController < ApplicationController
   def destroy
     @book.destroy
     respond_to do |format|
-      format.html { redirect_to books_url, notice: 'Book was successfully destroyed.' }
+      format.html { redirect_to books_url, notice: I18n.t('views.book.flash_messages.book_was_successfully_destroyed') }
       format.json { head :no_content }
     end
   end
@@ -677,7 +679,7 @@ purely in German.
 Our bibliography is completely in German, but the URLs are still in
 English. If we want to make all books available at the URL
 http://localhost:3000/buecher instead of the URL
-http://localhost:3000/books then we need to add the following entry to
+http://localhost:3000/books then we need to add/include the following entry to
 the `config/routes.rb`:
 
 [source,ruby]
@@ -732,6 +734,8 @@ shop example:
 $ rails new i18n-webshop
   [...]
 $ cd i18n-webshop
+$ echo "gem 'rails-i18n'" >> Gemfile
+$ bundle
 $
 ----
 
@@ -749,7 +753,7 @@ We still need to enter it as root page in the `config/routes.rb`:
 [source,ruby]
 .config/routes.rb
 ----
-Webshop::Application.routes.draw do
+Rails.application.routes.draw do
   get 'page/index'
   root 'page#index'
 end
@@ -792,8 +796,7 @@ If you then start the Rails server and again go to
 http://localhost:3000/ in the web browser, you will see the following
 web page:
 
-image::screenshots/chapter10/i18n_ganze_seite_page_index_default_locale_de.png[I18n ganze seite page index default locale
-de,title="I18n ganze seite page index default locale de"]
+image::screenshots/chapter10/i18n_ganze_seite_page_index_default_locale_de.png[I18n ganze seite page index default locale de,title="I18n ganze seite page index default locale de"]
 
 The web page has not changed, but as output of `<%= I18n.locale %>` you
 now get "de`' for German (Deutsch), not "en`' for English as before.
@@ -843,7 +846,7 @@ version. The first step is adapting the `config/routes.rb`
 [source,ruby]
 .config/routes.rb
 ----
-Webshop::Application.routes.draw do
+Rails.application.routes.draw do
   scope ':locale', locale: /en|de/ do
     get 'page/index'
     get '/', to: 'page#index'
@@ -861,10 +864,6 @@ parameter locale set by the route as `I18n.locale`:
 .app/controllers/application_controller.rb
 ----
 class ApplicationController < ActionController::Base
-  # Prevent CSRF attacks by raising an exception.
-  # For APIs, you may want to use :null_session instead.
-  protect_from_forgery with: :exception
-
   before_action :set_locale
 
   private
@@ -913,10 +912,6 @@ So we just need to add this method in
 .app/controllers/application_controller.rb
 ----
 class ApplicationController < ActionController::Base
-  # Prevent CSRF attacks by raising an exception.
-  # For APIs, you may want to use :null_session instead.
-  protect_from_forgery with: :exception
-
   before_action :set_locale
 
   def default_url_options
@@ -990,10 +985,6 @@ Please edit the `app/controllers/application_controller.rb` as follows:
 .app/controllers/application_controller.rb
 ----
 class ApplicationController < ActionController::Base
-  # Prevent CSRF attacks by raising an exception.
-  # For APIs, you may want to use :null_session instead.
-  protect_from_forgery with: :exception
-
   before_action :set_locale
 
   private
@@ -1021,7 +1012,7 @@ Prefix"] out of the `config/routes.rb`:
 [source,ruby]
 .config/routes.rb
 ----
-Webshop::Application.routes.draw do
+Rails.application.routes.draw do
   get "page/index"
   root 'page#index'
 end
@@ -1085,10 +1076,6 @@ Finally, we also want to adapt the `set_locale` methods in the file
 .app/controllers/application_controller.rb
 ----
 class ApplicationController < ActionController::Base
-  # Prevent CSRF attacks by raising an exception.
-  # For APIs, you may want to use :null_session instead.
-  protect_from_forgery with: :exception
-
   before_action :set_locale
 
   private
@@ -1156,10 +1143,6 @@ that analyses the accessed domain and sets the `I18n.locale` :
 .app/controllers/application_controller.rb
 ----
 class ApplicationController < ActionController::Base
-  # Prevent CSRF attacks by raising an exception.
-  # For APIs, you may want to use :null_session instead.
-  protect_from_forgery with: :exception
-
   before_action :set_locale
 
   private
@@ -1225,6 +1208,8 @@ $ rails generate scaffold Product name description 'price:decimal{7,2}'
   [...]
 $ rails db:migrate
   [...]
+$ echo "gem 'rails-i18n'" >> Gemfile
+$ bundle
 $
 ----
 
@@ -1254,10 +1239,6 @@ Path Prefix"]. We use the following `app/controllers/application_controller.rb`
 .app/controllers/application_controller.rb
 ----
 class ApplicationController < ActionController::Base
-  # Prevent CSRF attacks by raising an exception.
-  # For APIs, you may want to use :null_session instead.
-  protect_from_forgery with: :exception
-
   before_action :set_locale
 
   def default_url_options
@@ -1276,7 +1257,7 @@ This is the `config/routes.rb`
 [source,ruby]
 .config/routes.rb
 ----
-Webshop::Application.routes.draw do
+Rails.application.routes.draw do
   scope ':locale', locale: /en|de/ do
     resources :products
     get '/', to: 'products#index'

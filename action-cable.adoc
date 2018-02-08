@@ -4,9 +4,10 @@
 Most modern webpages are not just static. They often get updates from
 the server without interaction from the user. Your Twitter or GMail
 browser client will display new Tweets or E-Mails without you reloading
-the page. The server pushes the information. Action Cable provides the
+the page. The server pushes the information via WebSockets
+(https://en.wikipedia.org/wiki/WebSocket). Action Cable provides the
 tools you need to use these mechanisms without diving deep into the
-technical aspects of websockets.
+technical aspects of WebSockets.
 
 The use of Action Cable always includes JavaScript and this book is
 about Ruby and Ruby on Rails. So I will only show you a minimal
@@ -104,8 +105,8 @@ To load 'jQuery' we have to add it in the
 
 === Creating a Channel
 
-Rails provides a handy generator to create a new channel which we need to
-push information to the client. We call our channel "WebNotifications".
+Rails provides a handy generator to create a new WebSockets channel which we
+need to push information to the client. We call our channel "WebNotifications".
 
 [source,bash]
 ----
@@ -164,7 +165,8 @@ $ bundle
 
 Obviously you need a running Redis server. If you are running
 macOS with Homebrew you can install Redis with `brew install redis`
-and start it with `brew services start redis`.
+and start it with `brew services start redis` but don't forget to
+stop it with `brew services stop redis` after using it.
 
 And we have to configure the use of Redis:
 

@@ -155,8 +155,8 @@ file sizes.
 
 The speed advantage incidentally lies not just in the file size, but
 also in the fact that only one file is downloaded, not several.
-The HTTP/1.1 overhead for loading a file is time-consuming. Things
-are changing with HTTP/2.
+The HTTP/1.1 overhead for loading multiple files is time-consuming. Things
+are changing with HTTP/2 but that is beyond the scope of this book. 
 
 NOTE: jQuery used to be an essential part of the JavaScript
       world in the Ruby on Rails world. Since Rails version 5.1

@@ -15,7 +15,7 @@ enlightenment. The basic idea of TDD is that you write a test for each
 programming function to check this function. In the pure TDD teaching, this test
 is written before the actual programming. Yes, you will have a lot more to do
 initially. But later, you can run all the tests and see that the application
-works exactly as you wanted it to. The read advantage only becomes apparent
+works exactly as you wanted it to. The real advantage only becomes apparent
 after a few weeks or months, when you look at the project again and write an
 extension or new variation. Then you can safely change the code and check it
 still works properly by running the tests. This avoids a situation where you
@@ -533,7 +533,8 @@ http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html[api.rubyonrails.or
 
 The simplest variant for fixtures is static data. The fixture for `User` used in
 xref:test-driven-development#example-for-a-user-in-a-web-shop["Example for a
-User in a Web Shop"] statically looks as follows:
+User in a Web Shop"] statically should look as follows (please change the
+content of the file accordingly):
 
 [source,yaml]
 .test/fixtures/users.yml
@@ -547,7 +548,7 @@ two:
   last_name: Scully
 ----
 
-You simple write the data in YAML format into the corresponding file.
+You simply write the data in YAML format into the corresponding file.
 
 [[fixtures-with-erb]]
 === Fixtures with ERB
@@ -689,6 +690,6 @@ We just scratched the surface of the topic TDD in Rails. Have a
 look at http://guides.rubyonrails.org/testing.html for more information.
 There you will also find several good examples on this topic.
 
-One cool feature of Ruby on Rails testing is the ability to 
+One cool feature of Ruby on Rails testing is the ability to
 run the tests in real browsers (e.g. Chrome) and to take screenshots
 while doing so.

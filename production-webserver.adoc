@@ -66,7 +66,7 @@ root@debian:~# apt-get -y install nginx
 [[user-deployer]]
 === User Deployer
 
-Our Rails project is going use https://rvm.io[RVM] in the user space.
+Our Rails project is going to use https://rvm.io[RVM] in the user space.
 So we create a new user with the name `deployer`:
 
 [source,bash]

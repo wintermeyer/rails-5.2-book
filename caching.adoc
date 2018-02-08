@@ -404,7 +404,7 @@ But it also means that each new user of a web page gets a new etag for
 the same page. To ensure that the same users also get identical CSRF
 tokens, these are stored in a cookie by the web browser and consequently
 sent back to the web server every time the web page is visited. We have to
-the curl that we want to save all cookies in a file and transmit these cookies
+tell curl that we want to save all cookies in a file and transmit these cookies
 later if a request is received.
 
 For saving, we use the `-c cookies.txt` parameter.
@@ -471,12 +471,15 @@ Completed 304 Not Modified in 24ms (ActiveRecord: 0.2ms)
 Rails only took 24ms to process the request. Plus we have saved bandwidth again.
 The user will be happy with the speedy web application.
 
+NOTE: Find more generic information about etags at https://en.wikipedia.org/wiki/HTTP_ETag
+
 [[current_user-and-other-potential-parameters]]
 ==== current_user and Other Potential Parameters
 
 As basis for generating an etag, we can not just pass an object, but
 also an array of objects. This way, we can solve the problem with the
-logged-in user. Let’s assume that a logged-in user is output with the
+logged-in user who might get different content as a non logged-in user.
+Let’s assume that a logged-in user is output with the
 method `current_user`.
 
 We only have to add `etag { current_user.try :id }` in the
