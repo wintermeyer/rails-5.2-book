@@ -16,6 +16,13 @@ v5.2.0, 2017-02-08
 :pdf-page-size: [6in, 9in]
 ifndef::ebook-format[:leveloffset: +1]
 
+[dedication]
+= Dedication
+
+Für Oma und Opa
+
+I dedicate this book to my grandparents.
+
 include::preface.adoc[]
 
 include::how-to.adoc[]
