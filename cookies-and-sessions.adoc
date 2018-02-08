@@ -240,13 +240,13 @@ $ rails generate controller Home ping pong index
 First we create a method with which we can save the last three URLs in
 the session and set an instance variable `@breadcrumbs,` to be able to
 neatly retrieve the values in the view. To that end, we set up a
-`before_filter` in the `app/controllers/home_controller.rb`:
+`before_action` in the `app/controllers/home_controller.rb`:
 
 [source,ruby]
 .app/controllers/home_controller.rb
 ----
 class HomeController < ApplicationController
-  before_filter :set_breadcrumbs
+  before_action :set_breadcrumbs
 
   def ping
   end
@@ -356,7 +356,7 @@ The correspondingly expanded controller
 .app/controllers/home_controller.rb
 ----
 class HomeController < ApplicationController
-  before_filter :set_breadcrumbs
+  before_action :set_breadcrumbs
 
   def ping
   end

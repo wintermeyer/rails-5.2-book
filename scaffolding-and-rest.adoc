@@ -11,7 +11,7 @@ paradigm used for this is REST (Representational State Transfer).
 
 You can find a definition of REST at
 http://en.wikipedia.org/wiki/Representational_state_transfer[wikipedia.org/wiki/Representational_state_transfer].
-My super short version: the inventor Roy Fielding described in 2000 how you can
+My super short and a little bit oversimplified version: the inventor Roy Fielding described in 2000 how you can
 access data with a simple set of rules within the concept of
 http://en.wikipedia.org/wiki/Create,_read,_update_and_delete[CRUD] and the
 specification of the Hypertext Transfer Protocol (HTTP). CRUD is the
@@ -1185,7 +1185,7 @@ products GET  /products(.:format)     products#index
 If we now start the server `rails server` and go to the URL
 http://localhost:3000/products, we get an error message.
 
-image::screenshots/chapter05/products_routes_error.png[products index json,title="Products index json"]
+image::screenshots/chapter05/products_routes_error.png[products error message,title="Products error message"]
 
 The same message will be displayed in the log:
 

@@ -349,7 +349,7 @@ end
 
 That is very clear. The controller `ExampleController` is a descendant
 of the `ApplicationController` and contains currently just one method
-with the name `test`. This method contains currently no program logic.
+with the name `test`. This method has no program logic (it's empty).
 
 You will probably ask yourself how Rails knows that for the URL path
 `/example/test` it should process the controller `ExampleController` and
@@ -671,7 +671,7 @@ Even with small web projects, there are often elements that appear
 repeatedly, for example a footer on the page with contact info or a
 menu. Rails gives us the option of encapsulate this HTML code in form of
 partials and then integrating it within a view. A partial is also
-stored in the directory `app/views/example/`. But the file name must
+stored in the directory structure under `app/views/`. But it's file name must
 start with an underscore (`_`).
 
 As an example, we now add a mini footer to our page in a separate
@@ -843,10 +843,8 @@ irb(main):001:0> exit
 $
 ----
 
-Many readers use this ebook on small mobile devises. For them I try to
-keep any code or terminal output width to a minimum. To save the real
-estate which is by default occupied by `irb(main):001:0>` I use this
-configuration file:
+As written in the Ruby chapter I use this configuration file to save some
+real estate in the console:
 
 [source,ruby]
 .~/irbrc
@@ -1061,6 +1059,30 @@ $ rails db:migrate
 $ rails generate controller page index
 ----
 
+Rails 5.2 introduces a strict Content Security Policy (CSP) and that has
+to be configured to use the web console first. Please have a look at
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
+to understand the concept of CSP. You find your CSP configuration in the file
+`config/initializers/content_security_policy.rb`. Please configure it according
+to your security needs. Here's a quick and dirty hack to show you the use
+of web console. Please do not use this in production.
+
+[source,erb]
+.config/initializers/content_security_policy.rb
+----
+Rails.application.config.content_security_policy do |p|
+  # p.default_src :self, :https
+  p.font_src    :self, :https, :data
+  p.img_src     :self, :https, :data
+  p.object_src  :none
+  # p.script_src  :self, :https
+  p.style_src   :self, :https, :unsafe_inline
+
+  # Specify URI for violation reports
+  # p.report_uri "/csp-violation-report-endpoint"
+end
+----
+
 In the `app/controllers/page_controller.rb` we add the following code:
 
 [source,ruby]
@@ -1082,7 +1104,7 @@ command:
 <h1>Page#index</h1>
 <p>Find me in app/views/page/index.html.erb</p>
 
-<%= console %>
+<% console %>
 ----
 
 After starting the rails application with `rails server` and browsing to

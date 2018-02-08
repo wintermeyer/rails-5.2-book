@@ -87,7 +87,7 @@ Let's create the _model_ `country`:
 
 [source,bash]
 ----
-$ **rails generate model Country name population:integer**
+$ rails generate model Country name population:integer
 Running via Spring preloader in process 22053
       invoke  active_record
       create    db/migrate/20170322165321_create_countries.rb
@@ -146,8 +146,8 @@ end
 ----
 
 Hmmm ... the class `Country` is a child of `ApplicationRecord` which
-inherits from `ApplicationRecord`. Makes sense, as we are discussing
-ActiveRecord in this chapter. ;-)
+inherits from `ApplicationRecord`. In `ApplicationRecord` you'll find all the
+ActiveRecord magic.
 
 [[the-attributes-id-created_at-and-updated_at]]
 === The Attributes `id`, `created_at` and `updated_at`
@@ -1175,7 +1175,7 @@ Example: all albums from the 60s, sorted by name:
 $ rails console
 Running via Spring preloader in process 27764
 Loading development environment (Rails 5.2.0)
->> **Album.where(release_year: 1960..1969).order(:name)**
+>> Album.where(release_year: 1960..1969).order(:name)
   Album Load (0.2ms)  SELECT "albums".* FROM "albums" WHERE
   ("albums"."release_year" BETWEEN 1960 AND 1969)  ORDER BY "albums"."name"
   ASC
@@ -1856,18 +1856,6 @@ of a given category:
 => #<ActiveRecord::Associations::CollectionProxy []>
 ----
 
-Of course this is empty right now. But it is getting better. We can
-chain a `create` method after `fruits.products` to create a new
-product which has the needed `category_id`:
-
-[source,bash]
-----
->> fruits.products
-  Product Load (0.2ms)  SELECT "products".* FROM "products"
-  WHERE "products"."category_id" = ?  [["category_id", 1]]
-=> #<ActiveRecord::Associations::CollectionProxy []>
-----
-
 But it gets even better. We can chain the `create` method after the
 `fruits.products` to actually create a new product which has the
 correct `category_id`:
@@ -2237,7 +2225,7 @@ end
 [[has_many]]
 ==== has_many
 
-The most important options for `has_many` are.
+The most important options for `has_many` are:
 
 [[dependent-destroy]]
 dependent: :destroy
@@ -3010,11 +2998,11 @@ Product.create(name: 'Peanuts (8 x 200 g bag)', in_stock: false, weight: 1600,
 price: 17.49, expiration_date: Date.today + 1.year)
 ----
 
-Now drop the database and repopulate it with the `db/seeds.rb`:
+Now populate it with the `db/seeds.rb`:
 
 [source,bash]
 ----
-$ rails db:reset
+$ rails db:seed
   [...]
 $
 ----
@@ -3331,6 +3319,9 @@ WARNING: I assume that you understand the problems involved here.
 
 In our model `product` there are a few fields that must be filled in in
 any case. We can achieve this via `presence`.
+
+NOTE: Please excuse the duplication. I'm aware that I just used the very same
+      code to give you an idea what validation does.
 
 [source,ruby]
 .app/models/product.rb
@@ -3966,6 +3957,9 @@ validates :name,
           if: Proc.new { |a| a.email == 'test@test.com' }
 ----
 
+NOTE: If you want to dive more into `Proc` you'll find documentation about it
+      at https://ruby-doc.org/core-2.5.0/Proc.html
+
 [[writing-custom-validations]]
 === Writing Custom Validations
 
@@ -4021,7 +4015,8 @@ With `errors.add` we can add error messages for individual attributes.
 With `errors.add_to_base` you can add error messages for the whole
 object.
 
-Let's test the validation in the console:
+Let's test the validation in the console by introducing `Date.today + 1.day`
+to you. It does exactly what you'd expect from it. ;-)
 
 [source,bash]
 ----
@@ -4147,7 +4142,7 @@ $
 After a while we realise that we want to save not just the weight for
 some products, but also the height. So we need another database field.
 There is an easy to remember syntax for this,
-`rails generate migration add_*`:
+`rails generate migration add*`:
 
 [source,bash]
 ----
@@ -4196,10 +4191,6 @@ Loading development environment (Rails 5.2.0)
 "created_at", "updated_at", "height"]
 >> exit
 ----
-
-IMPORTANT: Please note that you need to add the new field
-           in `attr_accessible` in `app/models/product.rb`, otherwise
-           you will not have access to the `height` attribute.
 
 What if you want to look at the previous state of things? No problem.
 You can easily go back to the previous version with `rails db:rollback`:
@@ -4260,7 +4251,7 @@ The table was deleted with all data. We are back to square one.
 === Which Database is Used?
 
 The database table is created through the migration. As you can see, the
-table names automatically get the plural of the _model_s (`Person` vs.
+table names automatically get the plural of the model's name (`Person` vs.
 `people`). But in which database are the tables created? This is defined
 in the configuration file `config/database.yml`:
 
@@ -4297,13 +4288,13 @@ production:
 Three different databases are defined there in YAML format (see
 http://www.yaml.org/ or http://en.wikipedia.org/wiki/YAML). For us, only
 the `development` database is relevant for now (first item). By default,
-Rails usesSQLite3 there. SQLite3 may not be the correct choice for the
+Rails uses SQLite3 there. SQLite3 may not be the correct choice for the
 analysis of the weather data collected worldwide, but for a quick and
 straightforward development of Rails applications you will quickly learn
 to appreciate it. In the production environment, you can later still
 switch to "big" databases such as MySQL or PostgreSQL.
 
-To satisfy your curiosity, we have a quick look at the database with the
+To satisfy your curiosity, let's have a quick look at the database with the
 command line tool `sqlite3`:
 
 [source,bash]
@@ -4607,6 +4598,8 @@ class Order < ApplicationRecord
   end
 end
 ----
+
+`||= 1` sets the value to 1 if it isn't set already.
 
 And now we check in the console if a new order object automatically
 contains the quantity 1:

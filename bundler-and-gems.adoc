@@ -8,14 +8,14 @@ TIP: If you do not have much time, you can skip this chapter for now
 
 If a Ruby developer wants to offer a specific feature or a certain
 program or collection of programs to other Ruby developers, he can
-create a "gem" from these. This gem can then be installed
+create a package. Those packages are called "gem". They can then be installed
 with the command `gem install`.
 
 TIP: Have a look at https://www.ruby-toolbox.com to get an overview
      of the existing gems.
 
-In any Rails project, different gems are used and a developer can also
-add further gems. The programm `bundle` helps the
+Rails itself is a gem and any Rails project uses a lot of different gems.
+You as a developer can add further gems. The programm `bundle` helps the
 developer to install all these gems in the right version and to take
 into account dependencies.
 
@@ -104,8 +104,8 @@ NOTE: You have the option of installing certain gems only in certain
       lines in a `group :name do` loop.
 
 Apart from the file `Gemfile` there is also the file `Gemfile.lock` and
-the exact versions of the installed gems are listed there. In the above
-example, it looks like this:
+the exact versions of the installed gems are listed there.
+In the above example, it looks like this:
 
 [source,config]
 .Gemfile.lock
@@ -134,11 +134,12 @@ GEM
 ----
 
 The advantage of `Gemfile.lock` is that it makes it possible for several
-developers to work on the same Rails project independently from one
-another and to still be sure that they are all working with the same gem
-versions. If a file is `Gemfile.lock`, this will be used by the Bundler.
-This is also useful for deploying the Rails project later on a web
-server.
+developers to work on the same Rails project independently from one another and
+to still be sure that they are all working with the same gem versions. If a file
+version is locked in the `Gemfile.lock`, this version be used by the Bundler.
+This is also useful for deploying the Rails project later on a web server.
+
+IMPORTANT: Only edit `Gemfile` and never `Gemfile.lock`.
 
 Thanks to this mechanism you can use and develop several Rails projects
 with different gem version numbers in parallel.
