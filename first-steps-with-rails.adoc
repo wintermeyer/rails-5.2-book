@@ -107,6 +107,10 @@ $ cd testproject
 $ rails db:migrate
 ----
 
+NOTE: We don't need to run `rails db:migrate` which runs open database
+      migrations at this time but it is a good habit to make sure all
+      database migrations are done.
+
 We check if the new Rails application is working by launching the
 integrated web server.
 
