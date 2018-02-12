@@ -7,6 +7,8 @@ prefer smaller stand-alone code. Therefore, you can skip a couple of
 pages or even complete chapters without losing context. On the other hand I'm
 asking you a lot of times to create an other new Rails application.
 
+Word of warning: I'm not going to sprinkle CSS beauty anywhere. ;-)
+
 Don’t let people fool you into believing that Ruby on Rails is easy to learn. It
 is not! It's one of the best and most effective frameworks to develop web
 applications but it is hard to understand in the beginning. The worst mistake of
@@ -18,14 +20,14 @@ ideas and that is most important.
 == Newsletter and Updates
 
 * I publish a free Ruby on Rails email newsletter which offers news and general
-  information about Rails. You can subscribe at
+  information about Rails. You can subscribe it at
   `https://www.wintermeyer-consulting.de/newsletters/`
 * Twitter: `https://twitter.com/wintermeyer`
 
 == Consulting and Training
 
 Yes, I do offer Rails consulting and training anywhere in the world. Onsite and
-remote. Please contact me by email at sw@wintermeyer-consulting.de with your request.
+remote. Please contact me by email at sw@wintermeyer-consulting.de
 
 == Meetups and Conferences
 
@@ -35,7 +37,8 @@ meetup or conference. Do send me an email and I'll try to make it happen.
 == Feedback
 
 Two things are a highlights of my work as a book author: A 5 star Amazon review
-and an email from a reader. Please reach out and give me feedback.
+and an email or Twitter mention from a reader. Please reach out and give me
+feedback.
 
 Have fun with Ruby on Rails!
 
