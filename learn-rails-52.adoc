@@ -64,3 +64,5 @@ include::production-webserver.adoc[]
 include::credentials.adoc[]
 
 include::active_storage.adoc[]
+
+include::further_reading_material.adoc[]
