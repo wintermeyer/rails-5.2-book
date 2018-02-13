@@ -295,6 +295,206 @@ $ bin/rake db:migrate
 ==  CreateUsers: migrated (0.0019s) ===========================================
 ----
 
+== Popular Gems
+
+On https://www.ruby-toolbox.com you'll find most of the available gems. The
+main problem with gems is that many times you have no idea how active the
+community is that developed a gem. So you want to checkout their homepage and
+Github Repository first. It's a major headache to upgrade a Rails application
+which uses negleted Gems.
+
+I'd like to show you a couple of gems which are essential for many developers.
+But please do your due diligence first before you include a gem!
+
+=== acts_as_list
+
+Let's create a To-Do-List application which displays a couple of to-dos which
+can be edited by the user. We just need one scaffold for this. We call the model
+`task`. Here is the basic setup:
+
+[source,bash]
+----
+$ rails new to-do-list
+  [...]
+$ cd to-do-list
+$ rails generate scaffold task name completed:boolean
+  [...]
+$ rails db:migrate
+  [...]
+$ rails server
+----
+
+NOTE: Naming is always important within a Rails project. I've seen many examples
+      of the to-do-list application where the `Task` model has a field `task` too.
+      Don't do that. If you have a instance variable `@task` it is cleaner to have a
+      `@task.name` than a `@task.task` which is just confusing.
+
+=== Order your tasks
+
+A common idea for any to-do-list is the feature to order the tasks. For
+that you'll have to have some sort of `position` field in your model.
+Because this is such a common problem there is a very nice ready to go
+gem for this. It's called `acts_as_list`. To use it we have to add
+this line to the `Gemfile` and run the bundler:
+
+[source,ruby]
+.Gemfile
+----
+[...]
+gem 'acts_as_list'
+[...]
+----
+
+[source,bash]
+----
+$ bundle
+----
+
+To use it we have to add a `position` field to the `task` model.
+
+[source,bash]
+----
+$ rails generate migration AddPositionToTask position:integer
+  [...]
+$ rails db:migrate
+----
+
+If you already have a full database table of tasks you want to change
+the migration to something like this which sets the `position` field:
+
+[source,ruby]
+----
+class AddPositionToTask < ActiveRecord::Migration[5.2]
+  def change
+    add_column :tasks, :position, :integer
+    Task.order(:updated_at).each.with_index(1) do |task, index|
+      task.update_column :position, index
+    end
+  end
+end
+----
+
+The last change now is a change to the task model to make it use `acts_as_list`:
+
+[source,ruby]
+.app/models/task.rb
+----
+class Task < ApplicationRecord
+  acts_as_list
+end
+----
+
+For any new entry of the tasks table `acts_as_list` will set the `position`
+field automatically. But that is not all. You can use these methods to move
+the position of a task and reorder the list:
+
+- task.move_lower
+- task.move_higher
+- task.move_to_bottom
+- task.move_to_top
+
+And you have access to these very useful methods:
+
+- task.first?
+- task.last?
+- task.in_list?
+- task.not_in_list?
+- task.higher_item
+- task.higher_items
+- task.lower_item
+- task.lower_items
+
+All not rocket science but so much easier to use the gem than to reinvent a wheel.
+
+And don't forget to change the `index` action in your `tasks_controller.rb`
+to display the tasks in the right order:
+
+[source,ruby]
+.app/controllers/tasks_controller.rb
+----
+[...]
+def index
+  @tasks = Task.order(:position)
+end
+[...]
+----
+
+=== Check done tasks in your index view
+
+Wouldn't it be nice to have a way of checking done tasks in the `/tasks` index
+view instead of having to use the edit view every time? This could be done
+with a link to a yet to be created `check` action in the
+`app/controllers/tasks_controller.rb`. But there is a cleaner more RESTful way:
+Use the `update` action from a little form in each table row.
+
+Here's the example code snippet for `app/views/tasks/index.html.erb`:
+
+[source,erb]
+.app/views/tasks/index.html.erb
+----
+[...]
+<% @tasks.each do |task| %>
+  <tr>
+    <td><%= task.description %></td>
+    <td><%= task.completed %></td>
+    <td>
+      <% unless task.completed %>
+        <%= form_with(model: task, local: true) do |form| %>
+          <%= form.hidden_field :completed, value: true %>
+          <div class="actions">
+            <%= form.submit 'Check!', :name => 'check' %>
+          </div>
+        <% end %>
+      <% end %>
+    </td>
+    <td><%= link_to 'Show', task %></td>
+    <td><%= link_to 'Edit', edit_task_path(task) %></td>
+    <td><%= link_to 'Destroy', task, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+[...]
+----
+
+Find more information and the complete documentation about `acts_as_list` at
+https://github.com/swanandp/acts_as_list
+
+=== Authentication
+
+Most Rails applications need some kind of authentication system. The old
+RailsCast episode http://railscasts.com/episodes/250-authentication-from-scratch-revised
+shows how to do that by youself and it is not that complicated but it is
+also nice to do authentication with a good to go gem which not only handles
+passwords but also sends one time password emails and does the Facebook and
+Twitter magic. Saves a lot of time you can invest in your application.
+
+Have a look at https://www.ruby-toolbox.com/categories/rails_authentication which
+sorts the most popular authentication gems. I've used a couple of them but I
+don't have a clear favorite.
+
+If you have the time try 2-3 for your self. If you don't have the time go
+with devise by Plataformatec. https://github.com/plataformatec/devise
+
+=== Authorization
+
+Authentication is only half the battle. You need to have a system to limit
+access to special parts of your Rails application to specific users or user
+groups. You need an authorization system. Again, you can create such a system
+by youself it is not rocket science. But if you are in a hurry go to
+https://www.ruby-toolbox.com/categories/rails_authorization
+to find a list of available gems for this.
+
+But do not take the outdated `cancan` by the Rails legend Ryan Bates (the
+inventor of http://railscasts.com). It is an orphan. Use `cancancan` which is
+an up to date fork. You'll find it at https://github.com/cancancommunity/cancancan
+
+=== Simple Form
+
+Many Rails developers use the `simple_form`  gem
+(https://github.com/plataformatec/simple_form) to make their life easier.  It
+helps to create forms in an easier way than the default scaffolds. Please see
+for your self. I found this topic a double-edged sword. I try to stay as
+vanilla as possible but I see the attractiveness of `simple_form`.
+
 [[further-information-on-bundler]]
 == Further Information on Bundler
 
