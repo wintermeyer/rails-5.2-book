@@ -1,6 +1,6 @@
-= Learn Rails 5.2 Part I
+= Learn Rails 5.2
 Stefan Wintermeyer
-v5.2.0, 2017-02-08
+v5.2.1, 2017-02-13
 :doctype: book
 :producer: Stefan Wintermeyer
 :keywords: Ruby on Rails, Ruby on Rails 5.2, Rails, Rails 5.2, Ruby, Framework, MVC
