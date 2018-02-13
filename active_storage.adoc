@@ -244,3 +244,8 @@ end
 ----
 
 Now you can use the Web-GUI to upload new avatars.
+
+Active Storage can do a lot more. It can resize the images and store them in
+the cloud automatically. Please have a look at
+http://guides.rubyonrails.org/active_storage_overview.html for a total
+overview and the complete documentation.
